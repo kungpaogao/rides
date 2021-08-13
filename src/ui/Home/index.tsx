@@ -17,7 +17,7 @@ export default function Home() {
     <Container maxW="5xl">
       <Stack align="center">
         <Heading fontWeight={600} fontSize="6xl" lineHeight="110%">
-          <Text>Cornell Rides</Text>
+          <Text>Find a ride</Text>
         </Heading>
         <Box w="max" borderWidth="1px" rounded="md" p="6" boxShadow="base">
           <Stack spacing={3}>
@@ -45,7 +45,7 @@ export default function Home() {
               />
               <Input placeholder="Date" size="lg" />
             </InputGroup>
-            <Button colorScheme="teal">Search</Button>
+            <Button>Search</Button>
           </Stack>
         </Box>
       </Stack>
