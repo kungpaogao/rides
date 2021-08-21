@@ -1,0 +1,10 @@
+:root {
+  --rdp-cell-size: 40px;
+  --rdp-accent-color: var(--chakra-colors-teal-500);
+  --rdp-background-color: #e7edff;
+  /* Switch to dark colors for dark themes */
+  --rdp-accent-color-dark: #3003e1;
+  --rdp-background-color-dark: #180270;
+  /* Outline border for focused elements */
+  --rdp-outline: 2px solid var(--rdp-accent-color);
+}
