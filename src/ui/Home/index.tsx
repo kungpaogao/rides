@@ -9,15 +9,20 @@ import {
   InputLeftElement,
   Icon,
   Button,
+  VStack,
 } from "@chakra-ui/react";
-import { FiCalendar, FiMapPin } from "react-icons/fi";
+import { useState } from "react";
+import { FiMapPin } from "react-icons/fi";
+import DayPickerInput from "../DayPickerInput";
 
 export default function Home() {
+  const [date, setDate] = useState(new Date());
+
   return (
     <Container maxW="5xl">
-      <Stack align="center">
-        <Heading fontWeight={600} fontSize="6xl" lineHeight="110%">
-          <Text>Find a ride</Text>
+      <VStack pt="5">
+        <Heading my="3" fontWeight={600} fontSize="5xl" lineHeight="110%">
+          Find a ride
         </Heading>
         <Box w="max" borderWidth="1px" rounded="md" p="6" boxShadow="base">
           <Stack spacing={3}>
@@ -37,18 +42,15 @@ export default function Home() {
               />
               <Input placeholder="To" size="lg" />
             </InputGroup>
-            <InputGroup>
-              <InputLeftElement
-                pointerEvents="none"
-                h="full"
-                children={<Icon as={FiCalendar} />}
-              />
-              <Input placeholder="Date" size="lg" />
-            </InputGroup>
+            <DayPickerInput
+              date={date}
+              setDate={setDate}
+              inputProps={{ size: "lg" }}
+            />
             <Button>Search</Button>
           </Stack>
         </Box>
-      </Stack>
+      </VStack>
     </Container>
   );
 }
