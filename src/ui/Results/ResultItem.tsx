@@ -4,7 +4,7 @@ import { FiUser } from "react-icons/fi";
 
 export default function ResultItem() {
   return (
-    <Box rounded="md" border="1px" borderColor="gray.200" p="6">
+    <Box w="full" rounded="md" border="1px" borderColor="gray.200" p="6">
       <Flex>
         <Box flex="1">
           <VStack align="flex-start">
