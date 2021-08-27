@@ -14,31 +14,24 @@ import {
   PopoverTrigger,
 } from "@chakra-ui/react";
 
-import { DayPicker, useInput, UseInputOptions } from "react-day-picker";
+import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 import "./react-day-picker.css";
 import { FiCalendar } from "react-icons/fi";
+import { parse, format } from "date-fns";
 
 export default function DayPickerInput({
-  date = new Date(),
+  date,
+  dateFormat = "M/d/yyyy",
   setDate,
   inputProps,
 }: {
-  date?: Date;
-  setDate?: (date: Date) => void;
+  date?: string;
+  dateFormat?: string;
+  setDate?: (date: string) => void;
   inputProps?: InputProps;
 }) {
   const currentYear = new Date().getFullYear();
-
-  const options: UseInputOptions = {
-    defaultSelected: date,
-    fromYear: currentYear,
-    toYear: currentYear + 1,
-    format: "M/d/yyyy",
-    required: true,
-  };
-
-  const input = useInput(options);
 
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
@@ -56,10 +49,13 @@ export default function DayPickerInput({
             children={<Icon as={FiCalendar} />}
           />
           <Input
-            {...input.fieldProps}
             {...inputProps}
+            value={date}
             onFocus={() => setIsPopoverOpen(true)}
             placeholder="Date"
+            onChange={(e) => {
+              setDate?.(e.target.value);
+            }}
           />
         </InputGroup>
       </PopoverTrigger>
@@ -67,9 +63,14 @@ export default function DayPickerInput({
         <PopoverHeader>Pick a day</PopoverHeader>
         <PopoverBody>
           <DayPicker
-            {...input.dayPickerProps}
-            onSelect={(value: any) => {
-              setDate?.(value);
+            fromDate={new Date()}
+            fromYear={currentYear}
+            toYear={currentYear + 1}
+            required
+            month={parse(date!, dateFormat, new Date())}
+            selected={[parse(date!, dateFormat, new Date())]}
+            onDayClick={(value: any) => {
+              setDate?.(format(value, dateFormat));
               setIsPopoverOpen(false);
             }}
           />

@@ -1,7 +1,6 @@
 import {
   Container,
   Heading,
-  Text,
   Stack,
   Box,
   Input,
@@ -11,12 +10,14 @@ import {
   Button,
   VStack,
 } from "@chakra-ui/react";
+import { format } from "date-fns";
 import { useState } from "react";
 import { FiMapPin } from "react-icons/fi";
 import DayPickerInput from "../DayPickerInput";
 
 export default function Home() {
-  const [date, setDate] = useState(new Date());
+  const dateFormat = "M/d/yyyy";
+  const [date, setDate] = useState(format(new Date(), dateFormat));
 
   return (
     <Container maxW="5xl">
@@ -25,6 +26,7 @@ export default function Home() {
           Find a ride
         </Heading>
         <Box w="max" borderWidth="1px" rounded="md" p="6" boxShadow="base">
+          {date}
           <Stack spacing={3}>
             <InputGroup>
               <InputLeftElement

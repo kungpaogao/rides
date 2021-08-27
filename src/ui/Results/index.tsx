@@ -13,6 +13,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import DayPickerInput from "../DayPickerInput";
 import ResultItem from "./ResultItem";
 
 export default function Results() {
@@ -25,7 +26,7 @@ export default function Results() {
       <Grid templateColumns={{ md: "repeat(4, 1fr)" }} gap={3} p="3">
         <Input placeholder="From" />
         <Input placeholder="To" />
-        <Input placeholder="Date" />
+        <DayPickerInput />
         <Button>Search</Button>
       </Grid>
       <Flex direction="column" flex="1" wrap="wrap">
