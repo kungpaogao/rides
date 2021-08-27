@@ -26,7 +26,6 @@ export default function Home() {
           Find a ride
         </Heading>
         <Box w="max" borderWidth="1px" rounded="md" p="6" boxShadow="base">
-          {date}
           <Stack spacing={3}>
             <InputGroup>
               <InputLeftElement

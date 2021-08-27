@@ -21,7 +21,7 @@ import { FiCalendar } from "react-icons/fi";
 import { parse, format } from "date-fns";
 
 export default function DayPickerInput({
-  date,
+  date = format(new Date(), "M/d/yyyy"),
   dateFormat = "M/d/yyyy",
   setDate,
   inputProps,
