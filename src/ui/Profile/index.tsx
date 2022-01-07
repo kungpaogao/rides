@@ -9,10 +9,13 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { FaRegStar, FaStar } from "react-icons/fa";
+import { FiCheckCircle } from "react-icons/fi";
 
 export default function Profile() {
   const rating = 3;
   const numRatings = 25;
+
+  const numTrips = 3;
 
   return (
     <Container maxW="5xl" p="6">
@@ -28,12 +31,20 @@ export default function Profile() {
           ))}
           ({numRatings})
         </Text>
+        <Text display="flex" alignItems="center">
+          Verified email <Icon as={FiCheckCircle} ml="1" />
+        </Text>
+        <Text>Joined August 2021</Text>
+
+        <Heading as="h3" size="lg">
+          About
+        </Heading>
         <Text>College of Arts & Sciences</Text>
         <Text>Computer science</Text>
         <Text>Class of 2022</Text>
 
         <Heading as="h3" size="lg">
-          Previous Trips
+          Previous Trips ({numTrips})
         </Heading>
         <PreviousTrip />
         <PreviousTrip />

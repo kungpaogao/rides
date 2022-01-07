@@ -19,6 +19,9 @@ export default function Navigation() {
       <Link as={RouterLink} to="/profile">
         Profile
       </Link>
+      <Link as={RouterLink} to="/trip">
+        Trip
+      </Link>
     </HStack>
   );
 }

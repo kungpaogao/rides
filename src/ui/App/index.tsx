@@ -11,6 +11,7 @@ const Home = lazy(() => import("../Home"));
 const Navigation = lazy(() => import("../Navigation"));
 const Profile = lazy(() => import("../Profile"));
 const Results = lazy(() => import("../Results"));
+const TripDetail = lazy(() => import("../TripDetail"));
 
 const theme = extendTheme(withDefaultColorScheme({ colorScheme: "teal" }));
 
@@ -32,6 +33,9 @@ export default function App() {
               </Route>
               <Route path="/profile">
                 <Profile />
+              </Route>
+              <Route path="/trip">
+                <TripDetail />
               </Route>
             </Switch>
           </Suspense>
