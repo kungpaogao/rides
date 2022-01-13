@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 import { ReactNode } from "react";
 
 type LayoutProps = {
@@ -13,7 +14,13 @@ export default function Layout({ children }: LayoutProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex flex-col items-center justify-center w-full flex-1">
+      <nav className="text-left w-full p-5 border-b">
+        <span className="text-2xl font-bold">
+          <Link href="/">Cornell Rides</Link>
+        </span>
+      </nav>
+
+      <main className="flex flex-col items-center justify-center w-full flex-1 px-5 py-7">
         {children}
       </main>
 

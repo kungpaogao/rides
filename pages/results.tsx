@@ -36,7 +36,6 @@ const sample: Ride[] = [
 
 export default function Results() {
   const [results, setResults] = useState<Ride[]>([]);
-  const [isEmailMenuOpen, setIsEmailMenuOpen] = useState(false);
 
   useEffect(() => {
     async function getResults() {
@@ -55,7 +54,7 @@ export default function Results() {
   };
 
   return (
-    <div className="prose prose-headings:mt-0 w-full">
+    <div className="prose prose-h3:mt-0 w-full">
       <h2>Results</h2>
       <div className="flex flex-col gap-3">
         {results.map(({ id, from, to, datetime, numSeats, email, phone }) => (
