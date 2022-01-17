@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Ride {
+  id        BigInt   @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  datetime  DateTime @default(now()) @db.Timestamptz(6)
+  from      String   @default("\"\"")
+  to        String   @default("\"\"")
+  numSeats  Int      @default(0) @db.SmallInt
+  phone     String   @default("\"\"")
+  email     String   @default("\"\"")
+  user      String   @db.Uuid
+  users     User     @relation(fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("rides")
+}
+
+model User {
+  createdAt DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  id        String    @id @unique @db.Uuid
+  rides     Ride[]
+
+  @@map("users")
+}

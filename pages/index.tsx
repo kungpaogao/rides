@@ -10,7 +10,7 @@ export default function Home() {
   }
 
   return (
-    <div className="prose prose-a:no-underline w-full md:w-auto">
+    <div className="prose prose-a:no-underline prose-h2:mt-2 w-full md:w-auto">
       <h1>Cornell Rides</h1>
       <BasicButton
         className="w-full md:w-auto"
@@ -18,7 +18,11 @@ export default function Home() {
       >
         Post a ride
       </BasicButton>
-      <p>or</p>
+      <div className="w-full flex items-center gap-5">
+        <span className="flex-1 border-b-2" />
+        <p>or</p>
+        <span className="flex-1 border-b-2" />
+      </div>
       <h2>Search a ride</h2>
       <BasicInput expand name="search-from" label="From" placeholder="Ithaca" />
       <BasicInput
@@ -35,7 +39,7 @@ export default function Home() {
         label="Date"
         type="date"
       />
-      <BasicButton className="mt-3" expand onClick={() => routeTo("/results")}>
+      <BasicButton className="mt-5" expand onClick={() => routeTo("/results")}>
         Search
       </BasicButton>
     </div>
