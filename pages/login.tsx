@@ -1,5 +1,5 @@
 import BasicButton from "../components/BasicButton";
-import { supabase } from "../utils/supabaseClient";
+import { supabase } from "../lib/supabaseClient";
 
 export default function Login() {
   async function signInWithGoogle() {
