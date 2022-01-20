@@ -3,13 +3,14 @@ import BasicDropdown from "../components/BasicDropdown";
 import BasicDropdownItem from "../components/BasicDropdownItem";
 import PageStatus from "../types/PageStatus";
 import { useFetchStatus } from "../lib/useFetchStatus";
+import { Ride } from "@prisma/client";
 
 export default function Results() {
   const {
     data: results,
     error,
     status: pageStatus,
-  } = useFetchStatus(`/api/rides/`);
+  } = useFetchStatus<Ride[]>(`/api/rides/`);
 
   function copyToClipboard(value: string) {
     navigator.clipboard.writeText(value);
@@ -38,9 +39,7 @@ export default function Results() {
     );
   }
 
-  if (pageStatus === PageStatus.Success) {
-    console.log(results);
-
+  if (pageStatus === PageStatus.Success && results) {
     return (
       <div className="prose prose-h3:mt-0 w-full">
         <h2>Results</h2>

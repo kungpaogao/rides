@@ -14,7 +14,7 @@ export default function Home() {
       <h1>Cornell Rides</h1>
       <BasicButton
         className="w-full md:w-auto"
-        onClick={() => routeTo("/new-ride")}
+        onClick={() => routeTo("/ride/new")}
       >
         Post a ride
       </BasicButton>

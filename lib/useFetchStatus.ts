@@ -1,10 +1,9 @@
 import useSWR from "swr";
 import PageStatus from "../types/PageStatus";
+import { basicFetch } from "./basicFetch";
 
-export function useFetchStatus(request: RequestInfo) {
-  const fetcher = (request: RequestInfo) =>
-    fetch(request).then((res) => res.json());
-  const { data, error } = useSWR(request, fetcher);
+export function useFetchStatus<T>(request: RequestInfo) {
+  const { data, error } = useSWR<T>(request, basicFetch);
 
   let status;
   if (!error && !data) {
