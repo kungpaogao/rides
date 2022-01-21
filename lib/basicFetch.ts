@@ -1,3 +1,8 @@
+import { supabase } from "./supabaseClient";
+
+/**
+ * Fetch wrapper that throws errors on non-200 responses
+ */
 export async function basicFetch(input: RequestInfo, init?: RequestInit) {
   const res = await fetch(input, init);
 
@@ -8,4 +13,39 @@ export async function basicFetch(input: RequestInfo, init?: RequestInit) {
   }
 
   return res.json();
+}
+
+/**
+ * `basicFetch` with auth headers added using supabase session
+ */
+export async function basicFetchWithAuth(
+  input: RequestInfo,
+  init?: RequestInit
+) {
+  if (!supabase.auth.session()?.access_token) {
+    throw new Error("Unauthorized");
+  }
+
+  const initWithAuth = {
+    ...init,
+    headers: {
+      ...init?.headers,
+      Authorization: supabase.auth.session()?.access_token!,
+    },
+  };
+
+  return basicFetch(input, initWithAuth);
+}
+
+/**
+ * `basicFetchWithAuth` wrapper to cut out init
+ */
+export async function basicFetchPost(input: RequestInfo, data: any) {
+  return basicFetchWithAuth(input, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
 }

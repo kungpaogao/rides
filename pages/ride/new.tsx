@@ -1,14 +1,17 @@
+import { useState } from "react";
+import { useRouter } from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { basicFetchPost } from "../../lib/basicFetch";
 import BasicButton from "../../components/BasicButton";
 import BasicInput from "../../components/BasicInput";
 import { NewRide, NewRideSchema } from "../../types/NewRide";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { basicFetch } from "../../lib/basicFetch";
-import { supabase } from "../../lib/supabaseClient";
 
 export default function CreateRide() {
+  const router = useRouter();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitError, setIsSubmitError] = useState(false);
 
   const {
     register,
@@ -20,21 +23,22 @@ export default function CreateRide() {
   });
 
   const onSubmit: SubmitHandler<NewRide> = async (data) => {
+    setIsSubmitError(false);
     setIsSubmitting(true);
     try {
-      await basicFetch("/api/rides", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${supabase.auth.session()?.access_token}`,
-        },
-        body: JSON.stringify(data),
-      });
+      await basicFetchPost("/api/rides", data);
       reset();
-    } catch (err) {
-      console.error(err);
+    } catch (err: any) {
+      if (err.message === "Unauthorized") {
+        // redirect to login
+        router.push(`/login?redirect=/ride/new`);
+        // save to localStorage
+      } else {
+        setIsSubmitError(true);
+      }
+    } finally {
+      setIsSubmitting(false);
     }
-    setIsSubmitting(false);
   };
 
   return (
@@ -96,6 +100,11 @@ export default function CreateRide() {
       >
         Submit
       </BasicButton>
+      {isSubmitError && (
+        <p className="text-red-600 text-sm">
+          There was an error submitting your ride.
+        </p>
+      )}
     </form>
   );
 }

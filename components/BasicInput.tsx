@@ -32,7 +32,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
           } ${inputClassName}`}
           {...rest}
         />
-        {error && <p className="text-red-600 mt-1 text-sm">{error}</p>}
+        {error && <p className="text-red-600 mt-1 mb-0 text-sm">{error}</p>}
       </div>
     );
   }
