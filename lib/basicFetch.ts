@@ -23,7 +23,9 @@ export async function basicFetchWithAuth(
   init?: RequestInit
 ) {
   if (!supabase.auth.session()?.access_token) {
-    throw new Error("Unauthorized");
+    const error = new Error("Unauthorized");
+    error.name = "401";
+    throw error;
   }
 
   const initWithAuth = {

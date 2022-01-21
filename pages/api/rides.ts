@@ -4,9 +4,21 @@ import { supabase } from "../../lib/supabaseClient";
 import { NewRide, NewRideSchema } from "../../types/NewRide";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { user, error } = await supabase.auth.api.getUser(
-    req.headers.authorization!
-  );
+  // check authorization
+  const auth = req.headers.authorization;
+  if (!auth) {
+    // if missing authorization headers, return 401
+    res.status(401).json("Unauthorized");
+  }
+
+  // get user
+  const { user, error } = await supabase.auth.api.getUser(auth!);
+  if (!user || error) {
+    res.status(401).json("Unauthorized");
+  }
+  if (user && !user.email?.endsWith("@cornell.edu")) {
+    res.status(403).json("Forbidden");
+  }
 
   if (req.method === "GET") {
     // TODO: query params
@@ -25,14 +37,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       // validate
       NewRideSchema.parse(data);
 
-      console.log(req.headers.authorization!);
-      console.log(user);
-
-      if (!user) {
-        res.redirect("/login");
-        throw new Error("Unauthorized");
-      }
-
       // construct new ride
       const ride: any = {
         datetime: data.datetime,
@@ -41,7 +45,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         numSeats: data.numSeats,
         phone: data.phone,
         email: `${data.netId}@cornell.edu`, // TODO: probably just add this automatically
-        user: user.id,
+        user: user?.id,
       };
 
       const newRide = await prisma.ride.create({

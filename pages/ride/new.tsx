@@ -29,7 +29,7 @@ export default function CreateRide() {
       await basicFetchPost("/api/rides", data);
       reset();
     } catch (err: any) {
-      if (err.message === "Unauthorized") {
+      if (err.name === "401") {
         // redirect to login
         router.push(`/login?redirect=/ride/new`);
         // save to localStorage

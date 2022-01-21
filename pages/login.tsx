@@ -4,8 +4,7 @@ import BasicButton from "../components/BasicButton";
 import { supabase } from "../lib/supabaseClient";
 
 export default function Login() {
-  const router = useRouter();
-  const { query } = router;
+  const { query, push } = useRouter();
   const redirect = Array.isArray(query.redirect)
     ? query.redirect.join("")
     : query.redirect;
@@ -13,7 +12,7 @@ export default function Login() {
   // redirect if user is already signed in
   useEffect(() => {
     if (supabase.auth.session()) {
-      router.push(redirect || "/");
+      push(redirect || "/");
     }
   }, []);
 

@@ -4,13 +4,16 @@ import BasicDropdownItem from "../components/BasicDropdownItem";
 import PageStatus from "../types/PageStatus";
 import { useFetchStatus } from "../lib/useFetchStatus";
 import { Ride } from "@prisma/client";
+import { useRouter } from "next/router";
 
 export default function Results() {
+  const router = useRouter();
+
   const {
     data: results,
     error,
     status: pageStatus,
-  } = useFetchStatus<Ride[]>(`/api/rides/`);
+  } = useFetchStatus<Ride[], Error>(`/api/rides/`);
 
   function copyToClipboard(value: string) {
     navigator.clipboard.writeText(value);
@@ -28,12 +31,15 @@ export default function Results() {
   }
 
   if (pageStatus === PageStatus.Error) {
-    console.error(error);
+    if (error?.name === "401") {
+      router.push("/login?redirect=/results");
+    }
+
     return (
       <div className="prose prose-h3:mt-0 w-full">
         <h2>Results</h2>
         <div className="flex flex-col gap-3 items-center justify-center">
-          Something went wrong. Please try refreshing the page.
+          {error?.message || "Something went wrong :("}
         </div>
       </div>
     );
