@@ -6,7 +6,7 @@ import { useFetchStatus } from "../lib/useFetchStatus";
 import { Ride } from "@prisma/client";
 import { useRouter } from "next/router";
 
-export default function Results() {
+export default function Search() {
   const router = useRouter();
 
   const {
@@ -32,7 +32,7 @@ export default function Results() {
 
   if (pageStatus === PageStatus.Error) {
     if (error?.name === "401") {
-      router.push("/login?redirect=/results");
+      router.push(`/login?redirect=${location.pathname}`);
     }
 
     return (

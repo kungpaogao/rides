@@ -31,7 +31,7 @@ export default function CreateRide() {
     } catch (err: any) {
       if (err.name === "401") {
         // redirect to login
-        router.push(`/login?redirect=/ride/new`);
+        router.push(`/login?redirect=${location.pathname}`);
         // save to localStorage
       } else {
         setIsSubmitError(true);

@@ -20,7 +20,7 @@ export default function Layout({ children }: LayoutProps) {
         </span>
       </nav>
 
-      <main className="flex flex-col items-center justify-center w-full flex-1 px-5 py-7">
+      <main className="flex flex-col items-center w-full flex-1 px-5 py-7">
         {children}
       </main>
 

@@ -3,18 +3,14 @@ import BasicButton from "../components/BasicButton";
 import BasicInput from "../components/BasicInput";
 
 export default function Home() {
-  const router = useRouter();
-
-  function routeTo(route: string) {
-    router.push(route);
-  }
+  const { push } = useRouter();
 
   return (
     <div className="prose prose-a:no-underline prose-h2:mt-2 w-full md:w-auto">
       <h1>Cornell Rides</h1>
       <BasicButton
         className="w-full md:w-auto"
-        onClick={() => routeTo("/ride/new")}
+        onClick={() => push("/ride/new")}
       >
         Post a ride
       </BasicButton>
@@ -39,7 +35,7 @@ export default function Home() {
         label="Date"
         type="date"
       />
-      <BasicButton className="mt-5" expand onClick={() => routeTo("/results")}>
+      <BasicButton className="mt-5" expand onClick={() => push("/search")}>
         Search
       </BasicButton>
     </div>
