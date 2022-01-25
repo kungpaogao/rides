@@ -29,7 +29,7 @@ export default function BasicDropdown({
         <DropdownMenu.Content
           sideOffset={5}
           align="start"
-          className="border bg-white shadow-md p-1 rounded-md md:w-48 w-96"
+          className="w-96 rounded-md border bg-white p-1 shadow-md md:w-48"
         >
           {children}
         </DropdownMenu.Content>

@@ -6,7 +6,7 @@ export default function Home() {
   const { push } = useRouter();
 
   return (
-    <div className="prose prose-a:no-underline prose-h2:mt-2 w-full md:w-auto">
+    <div className="prose w-full prose-h2:mt-2 prose-a:no-underline md:w-auto">
       <h1>Cornell Rides</h1>
       <BasicButton
         className="w-full md:w-auto"
@@ -14,7 +14,7 @@ export default function Home() {
       >
         Post a ride
       </BasicButton>
-      <div className="w-full flex items-center gap-5">
+      <div className="flex w-full items-center gap-5">
         <span className="flex-1 border-b-2" />
         <p>or</p>
         <span className="flex-1 border-b-2" />

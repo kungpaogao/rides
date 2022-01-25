@@ -8,23 +8,23 @@ type LayoutProps = {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
+    <div className="flex min-h-screen flex-col items-center justify-center">
       <Head>
         <title>Cornell Rides</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <nav className="text-left w-full p-5 border-b">
+      <nav className="w-full border-b p-5 text-left">
         <span className="text-2xl font-bold">
           <Link href="/">Cornell Rides</Link>
         </span>
       </nav>
 
-      <main className="flex flex-col items-center w-full flex-1 px-5 py-7">
+      <main className="flex w-full flex-1 flex-col items-center px-5 py-7">
         {children}
       </main>
 
-      <footer className="flex items-center justify-center w-full h-24 border-t">
+      <footer className="flex h-24 w-full items-center justify-center border-t">
         Built for fun :)
       </footer>
     </div>

@@ -11,7 +11,7 @@ const BasicButton = forwardRef<HTMLButtonElement, BasicButtonProps>(
     return (
       <button
         ref={ref}
-        className={`border rounded shadow px-2 py-1 mt-3 hover:shadow-md transition ${
+        className={`mt-3 rounded border px-2 py-1 shadow transition hover:shadow-md ${
           expand && "w-full md:w-auto"
         } ${className}`}
         {...rest}

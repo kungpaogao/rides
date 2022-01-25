@@ -9,11 +9,10 @@ import { useRouter } from "next/router";
 export default function Search() {
   const router = useRouter();
 
-  const {
-    data: results,
-    error,
-    status: pageStatus,
-  } = useFetchStatus<Ride[], Error>(`/api/rides/`);
+  const { data: results, error, status: pageStatus } = useFetchStatus<
+    Ride[],
+    Error
+  >(`/api/rides/`);
 
   function copyToClipboard(value: string) {
     navigator.clipboard.writeText(value);
@@ -21,9 +20,9 @@ export default function Search() {
 
   if (pageStatus === PageStatus.Idle || pageStatus === PageStatus.Loading) {
     return (
-      <div className="prose prose-h3:mt-0 w-full">
+      <div className="prose w-full prose-h3:mt-0">
         <h2>Results</h2>
-        <div className="flex flex-col gap-3 items-center justify-center">
+        <div className="flex flex-col items-center justify-center gap-3">
           Loading...
         </div>
       </div>
@@ -36,9 +35,9 @@ export default function Search() {
     }
 
     return (
-      <div className="prose prose-h3:mt-0 w-full">
+      <div className="prose w-full prose-h3:mt-0">
         <h2>Results</h2>
-        <div className="flex flex-col gap-3 items-center justify-center">
+        <div className="flex flex-col items-center justify-center gap-3">
           {error?.message || "Something went wrong :("}
         </div>
       </div>
@@ -47,14 +46,14 @@ export default function Search() {
 
   if (pageStatus === PageStatus.Success && results) {
     return (
-      <div className="prose prose-h3:mt-0 w-full">
+      <div className="prose w-full prose-h3:mt-0">
         <h2>Results</h2>
         <div className="flex flex-col gap-3">
           {results.map(
             ({ id, from, to, datetime, numSeats, email, phone }: any) => (
               <div
                 key={id}
-                className="flex flex-row flex-wrap border border-gray-300 rounded-md p-5"
+                className="flex flex-row flex-wrap rounded-md border border-gray-300 p-5"
               >
                 <div className="w-full md:flex-1">
                   <h3>

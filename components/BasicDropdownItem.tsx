@@ -12,7 +12,7 @@ export default function BasicDropdownItem({
 }: BasicDropdownItemProps) {
   return (
     <DropdownMenu.Item
-      className={`rounded focus:bg-slate-100 px-2 py-1 ${className}`}
+      className={`rounded px-2 py-1 focus:bg-slate-100 ${className}`}
       {...rest}
     >
       {children}

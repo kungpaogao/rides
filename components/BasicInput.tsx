@@ -27,12 +27,12 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
         <label className={`block ${labelClassName}`}>{label}</label>
         <input
           ref={ref}
-          className={`border rounded px-2 py-1 ${
+          className={`rounded border px-2 py-1 ${
             expand && "w-full md:w-auto"
           } ${inputClassName}`}
           {...rest}
         />
-        {error && <p className="text-red-600 mt-1 mb-0 text-sm">{error}</p>}
+        {error && <p className="mt-1 mb-0 text-sm text-red-600">{error}</p>}
       </div>
     );
   }
