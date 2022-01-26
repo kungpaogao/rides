@@ -1,6 +1,6 @@
 import { forwardRef, InputHTMLAttributes } from "react";
 
-type BasicInputProps = InputHTMLAttributes<HTMLInputElement> & {
+export type BasicInputProps = InputHTMLAttributes<HTMLInputElement> & {
   label: string;
   className?: string;
   labelClassName?: string;
@@ -24,7 +24,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
   ) => {
     return (
       <div className={className}>
-        <label className={`block ${labelClassName}`}>{label}</label>
+        {label && <label className={`block ${labelClassName}`}>{label}</label>}
         <input
           ref={ref}
           className={`rounded border px-2 py-1 ${
