@@ -6,9 +6,11 @@ import { basicFetchPost } from "../../lib/basicFetch";
 import BasicButton from "../../components/BasicButton";
 import BasicInput from "../../components/BasicInput";
 import { NewRide, NewRideSchema } from "../../types/NewRide";
+import PlaceSearchInput from "../../components/PlaceSearchInput";
+import { useRef } from "react";
 
 export default function CreateRide() {
-  const router = useRouter();
+  const { push, pathname } = useRouter();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitError, setIsSubmitError] = useState(false);
@@ -18,9 +20,23 @@ export default function CreateRide() {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<NewRide>({
     resolver: zodResolver(NewRideSchema),
   });
+
+  const { ref: fromRef, ...fromRegisterRest } = register("from", {
+    onBlur: (e) => {
+      setValue("from", e.target.value);
+    },
+  });
+  const { ref: toRef, ...toRegisterRest } = register("to", {
+    onBlur: (e) => {
+      setValue("to", e.target.value);
+    },
+  });
+  const fromAutocompleteRef = useRef<HTMLInputElement | null>(null);
+  const toAutocompleteRef = useRef<HTMLInputElement | null>(null);
 
   const onSubmit: SubmitHandler<NewRide> = async (data) => {
     setIsSubmitError(false);
@@ -31,7 +47,7 @@ export default function CreateRide() {
     } catch (err: any) {
       if (err.name === "401") {
         // redirect to login
-        router.push(`/login?redirect=${location.pathname}`);
+        push(`/login?redirect=${pathname}`);
         // save to localStorage
       } else {
         setIsSubmitError(true);
@@ -44,20 +60,28 @@ export default function CreateRide() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="prose w-full md:w-auto">
       <h2>Ride Information</h2>
-      <BasicInput
+      <PlaceSearchInput
         expand
         label="From"
-        placeholder="Ithaca"
-        error={errors.from?.message}
-        {...register("from")}
+        autocompleteRef={fromAutocompleteRef}
+        ref={(e) => {
+          fromRef(e);
+          fromAutocompleteRef.current = e;
+        }}
+        error={errors.to?.message}
+        {...fromRegisterRest}
       />
-      <BasicInput
+      <PlaceSearchInput
         expand
         className="mt-3"
         label="To"
-        placeholder="Boston"
+        autocompleteRef={toAutocompleteRef}
+        ref={(e) => {
+          toRef(e);
+          toAutocompleteRef.current = e;
+        }}
         error={errors.to?.message}
-        {...register("to")}
+        {...toRegisterRest}
       />
       <BasicInput
         expand
@@ -72,6 +96,7 @@ export default function CreateRide() {
         className="mt-3"
         label="Seats"
         type="number"
+        defaultValue={0}
         min={0}
         error={errors.numSeats?.message}
         {...register("numSeats", { valueAsNumber: true })}
@@ -101,7 +126,7 @@ export default function CreateRide() {
         Submit
       </BasicButton>
       {isSubmitError && (
-        <p className="text-red-600 text-sm">
+        <p className="text-sm text-red-600">
           There was an error submitting your ride.
         </p>
       )}

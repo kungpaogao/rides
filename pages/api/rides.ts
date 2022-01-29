@@ -1,5 +1,8 @@
+import { Ride } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { geocode } from "../../lib/googleMaps";
 import { prisma } from "../../lib/prismaClient";
+import { queryToString } from "../../lib/queryToString";
 import { supabase } from "../../lib/supabaseClient";
 import { NewRide, NewRideSchema } from "../../types/NewRide";
 
@@ -21,9 +24,26 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   if (req.method === "GET") {
-    // TODO: query params
     try {
-      const rides = await prisma.ride.findMany();
+      const { from, to, datetime } = req.query;
+      // const [fromLocation, toLocation] = await geocode([
+      //   queryToString(from),
+      //   queryToString(to),
+      // ]);
+
+      // TODO: raw sql query
+      // const rides = await prisma.$queryRaw<Ride[]>`
+      // select *
+      // from rides
+      // where (
+      //   earth_distance(
+      //     ll_to_earth(${fromLocation.lat}, ${fromLocation.lng}),
+      //     ll_to_earth(split_part(from, ',', 1), split_part(from, ',', 2))
+      //   ) <= 100
+      // )
+      // `;
+
+      const rides = await prisma.ride.findMany({});
       res.status(200).json(rides);
     } catch (err) {
       console.error(err);
@@ -37,11 +57,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       // validate
       NewRideSchema.parse(data);
 
+      // geocode
+      const [fromLocation, toLocation] = await geocode([data.from, data.to]);
+
       // construct new ride
       const ride: any = {
         datetime: data.datetime,
-        from: data.from,
-        to: data.to,
+        fromLat: fromLocation.lat,
+        fromLng: fromLocation.lng,
+        toLat: toLocation.lat,
+        toLng: toLocation.lng,
         numSeats: data.numSeats,
         phone: data.phone,
         email: `${data.netId}@cornell.edu`, // TODO: probably just add this automatically

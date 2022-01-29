@@ -1,7 +1,12 @@
 import { Loader } from "@googlemaps/js-api-loader";
+import {
+  Client,
+  GeocodeRequest,
+  LatLngLiteral,
+} from "@googlemaps/google-maps-services-js";
 
 export const loader = new Loader({
-  apiKey: process.env.NEXT_PUBLIC_MAPS_API_KEY || "",
+  apiKey: process.env.NEXT_PUBLIC_PLACES_API_KEY || "",
   version: "weekly",
   libraries: ["places"],
 });
@@ -24,3 +29,21 @@ export const autocompleteOptions: google.maps.places.AutocompleteOptions = {
   fields: ["geometry"],
   types: ["(cities)"],
 };
+
+export const client = new Client({});
+
+function geocodeRequestWithKey(address: string): GeocodeRequest {
+  return {
+    params: {
+      key: process.env.GEOCODING_API_KEY || "",
+      address,
+    },
+  };
+}
+
+export async function geocode(locations: string[]): Promise<LatLngLiteral[]> {
+  const geoResponses = await Promise.all(
+    locations.map((loc) => client.geocode(geocodeRequestWithKey(loc)))
+  );
+  return geoResponses.map((geo) => geo.data.results[0].geometry.location);
+}

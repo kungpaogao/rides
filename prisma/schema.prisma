@@ -8,11 +8,13 @@ datasource db {
 }
 
 model Ride {
-  id        String   @id @unique(map: "unique_id") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id        String   @id @unique(map: "unique_id") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   datetime  DateTime @default(now()) @db.Timestamptz(6)
-  from      String   @default("\"\"")
-  to        String   @default("\"\"")
+  fromLat   Float
+  fromLng   Float
+  toLat     Float
+  toLng     Float
   numSeats  Int      @default(0) @db.SmallInt
   phone     String   @default("\"\"")
   email     String   @default("\"\"")
