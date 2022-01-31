@@ -1,9 +1,5 @@
 import { Loader } from "@googlemaps/js-api-loader";
-import {
-  Client,
-  GeocodeRequest,
-  LatLngLiteral,
-} from "@googlemaps/google-maps-services-js";
+import { Client, LatLngLiteral } from "@googlemaps/google-maps-services-js";
 
 export const loader = new Loader({
   apiKey: process.env.NEXT_PUBLIC_PLACES_API_KEY || "",
@@ -32,18 +28,16 @@ export const autocompleteOptions: google.maps.places.AutocompleteOptions = {
 
 export const client = new Client({});
 
-function geocodeRequestWithKey(address: string): GeocodeRequest {
-  return {
-    params: {
-      key: process.env.GEOCODING_API_KEY || "",
-      address,
-    },
-  };
-}
-
-export async function geocode(locations: string[]): Promise<LatLngLiteral[]> {
+export async function geocode(addresses: string[]): Promise<LatLngLiteral[]> {
   const geoResponses = await Promise.all(
-    locations.map((loc) => client.geocode(geocodeRequestWithKey(loc)))
+    addresses.map((address) =>
+      client.geocode({
+        params: {
+          key: process.env.GEOCODING_API_KEY || "",
+          address,
+        },
+      })
+    )
   );
   return geoResponses.map((geo) => geo.data.results[0].geometry.location);
 }

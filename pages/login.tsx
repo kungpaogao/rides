@@ -1,16 +1,16 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import BasicButton from "../components/BasicButton";
+import { queryToString } from "../lib/queryToString";
 import { supabase } from "../lib/supabaseClient";
 
 export default function Login() {
   const { query, push } = useRouter();
-  const redirect = Array.isArray(query.redirect)
-    ? query.redirect.join("")
-    : query.redirect;
+  const redirect = queryToString(query.redirect);
 
   // redirect if user is already signed in
   useEffect(() => {
+    // TODO: fix infinite loop sometimes
     if (supabase.auth.session()) {
       push(redirect || "/");
     }

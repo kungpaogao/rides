@@ -32,17 +32,23 @@ export default function Home() {
     },
   });
 
-  const onSubmit: SubmitHandler<SearchRide> = async (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<SearchRide> = async ({
+    from,
+    to,
+    datetime,
+  }) => {
+    const searchParams = new URLSearchParams({
+      from,
+      to,
+      dt: datetime.toISOString(),
+    });
+    push(`/search?${searchParams}`);
   };
 
   return (
     <div className="prose w-full prose-h2:mt-2 prose-a:no-underline md:w-auto">
       <h1>Cornell Rides</h1>
-      <BasicButton
-        className="w-full md:w-auto"
-        onClick={() => push("/ride/new")}
-      >
+      <BasicButton className="w-full" onClick={() => push("/ride/new")}>
         Post a ride
       </BasicButton>
       <div className="flex w-full items-center gap-5">
@@ -83,7 +89,7 @@ export default function Home() {
           error={errors.datetime?.message}
           {...register("datetime", { valueAsDate: true })}
         />
-        <BasicButton className="mt-5" expand type="submit">
+        <BasicButton className="mt-5 w-full" type="submit">
           Search
         </BasicButton>
       </form>

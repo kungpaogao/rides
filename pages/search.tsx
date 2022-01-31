@@ -5,14 +5,25 @@ import PageStatus from "../types/PageStatus";
 import { useFetchStatus } from "../lib/useFetchStatus";
 import { Ride } from "@prisma/client";
 import { useRouter } from "next/router";
+import Loading from "../components/Loading";
+import { queryToString } from "../lib/queryToString";
 
 export default function Search() {
-  const router = useRouter();
+  const { push, pathname, query } = useRouter();
 
-  const { data: results, error, status: pageStatus } = useFetchStatus<
-    Ride[],
-    Error
-  >(`/api/rides/`);
+  const urlSearchParams = () => {
+    let params: any = {};
+    Object.keys(query).forEach((k) => {
+      params[k] = queryToString(query[k]);
+    });
+    return new URLSearchParams(params);
+  };
+
+  const {
+    data: results,
+    error,
+    status: pageStatus,
+  } = useFetchStatus<Ride[], Error>(`/api/rides?${urlSearchParams()}`);
 
   function copyToClipboard(value: string) {
     navigator.clipboard.writeText(value);
@@ -23,7 +34,7 @@ export default function Search() {
       <div className="prose w-full prose-h3:mt-0">
         <h2>Results</h2>
         <div className="flex flex-col items-center justify-center gap-3">
-          Loading...
+          <Loading />
         </div>
       </div>
     );
@@ -31,7 +42,7 @@ export default function Search() {
 
   if (pageStatus === PageStatus.Error) {
     if (error?.name === "401") {
-      router.push(`/login?redirect=${location.pathname}`);
+      push(`/login?redirect=${pathname}`);
     }
 
     return (
