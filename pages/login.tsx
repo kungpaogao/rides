@@ -11,6 +11,7 @@ export default function Login() {
   // redirect if user is already signed in
   useEffect(() => {
     // TODO: fix infinite loop sometimes
+    return;
     if (supabase.auth.session()) {
       push(redirect || "/");
     }

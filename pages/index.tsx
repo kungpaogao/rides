@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
 import { useRef } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { FiSearch } from "react-icons/fi";
 import BasicButton from "../components/BasicButton";
 import BasicInput from "../components/BasicInput";
 import PlaceSearchInput from "../components/PlaceSearchInput";
@@ -10,12 +11,7 @@ import { SearchRide, SearchRideSchema } from "../types/SearchRide";
 export default function Home() {
   const { push } = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-  } = useForm<SearchRide>({
+  const { register, handleSubmit, setValue } = useForm<SearchRide>({
     resolver: zodResolver(SearchRideSchema),
   });
 
@@ -46,53 +42,68 @@ export default function Home() {
   };
 
   return (
-    <div className="prose w-full prose-h2:mt-2 prose-a:no-underline md:w-auto">
-      <h1>Cornell Rides</h1>
-      <BasicButton className="w-full" onClick={() => push("/ride/new")}>
-        Post a ride
-      </BasicButton>
-      <div className="flex w-full items-center gap-5">
-        <span className="flex-1 border-b-2" />
-        <p>or</p>
-        <span className="flex-1 border-b-2" />
-      </div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <h2>Search a ride</h2>
+    <div className="w-full py-7">
+      <h2 className="text-5xl font-bold">
+        Carpool with <br />
+        other students
+      </h2>
+      <h3 className="mt-5 text-2xl">
+        An open-source platform to post and search for rides.
+      </h3>
+
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="mx-auto mt-12 flex max-w-5xl items-center rounded-lg border bg-gray-100 p-1"
+      >
         <PlaceSearchInput
-          expand
           label="From"
+          placeholder="Ithaca, NY"
+          className="group mr-2 flex-1 rounded-md border border-gray-100 p-3 focus-within:border-gray-200 focus-within:bg-white focus-within:shadow-lg"
+          labelClassName="px-2"
+          inputClassName="w-full border-none bg-transparent"
           autocompleteRef={searchFromAutocompleteRef}
           ref={(e) => {
             searchFromRef(e);
             searchFromAutocompleteRef.current = e;
           }}
-          error={errors.from?.message}
           {...searchFromRest}
         />
         <PlaceSearchInput
-          expand
-          className="mt-3"
           label="To"
+          placeholder="New York, NY"
+          className="group mr-2 flex-1 rounded-md border border-gray-100 p-3 focus-within:border-gray-200 focus-within:bg-white focus-within:shadow-lg"
+          labelClassName="px-2"
+          inputClassName="w-full border-none bg-transparent"
           autocompleteRef={searchToAutocompleteRef}
           ref={(e) => {
             searchToRef(e);
             searchToAutocompleteRef.current = e;
           }}
-          error={errors.to?.message}
           {...searchToRest}
         />
         <BasicInput
-          expand
-          className="mt-3"
           label="Date"
           type="date"
-          error={errors.datetime?.message}
+          className="group mr-2 flex-1 rounded-md border border-gray-100 p-3 focus-within:border-gray-200 focus-within:bg-white focus-within:shadow-lg"
+          labelClassName="px-2"
+          inputClassName="w-full border-none bg-transparent"
           {...register("datetime", { valueAsDate: true })}
         />
-        <BasicButton className="mt-5 w-full" type="submit">
-          Search
+        <BasicButton
+          className="mx-3 aspect-square w-12 rounded-lg border-black bg-black !p-3 text-white hover:shadow-lg"
+          type="submit"
+        >
+          <FiSearch className="h-full w-full" title="Search" />
         </BasicButton>
       </form>
+      <div className="flex w-full items-center gap-5">
+        <span className="flex-1 border-b-2" />
+        <p>or</p>
+        <span className="flex-1 border-b-2" />
+      </div>
+      <BasicButton className="w-full" onClick={() => push("/ride/new")}>
+        Post a ride
+      </BasicButton>
     </div>
   );
 }

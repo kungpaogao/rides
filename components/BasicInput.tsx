@@ -12,11 +12,12 @@ export type BasicInputProps = InputHTMLAttributes<HTMLInputElement> & {
 const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
   (
     {
+      name,
       label,
-      className,
-      labelClassName,
-      inputClassName,
-      expand,
+      className = "",
+      labelClassName = "",
+      inputClassName = "",
+      expand = "",
       error,
       ...rest
     },
@@ -24,12 +25,18 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
   ) => {
     return (
       <div className={className}>
-        {label && <label className={`block ${labelClassName}`}>{label}</label>}
+        {label && (
+          <label htmlFor={name} className={`block ${labelClassName}`}>
+            {label}
+          </label>
+        )}
         <input
           ref={ref}
           className={`rounded border px-2 py-1 ${
             expand && "w-full md:w-auto"
           } ${inputClassName}`}
+          id={name}
+          name={name}
           {...rest}
         />
         {error && <p className="mt-1 mb-0 text-sm text-red-600">{error}</p>}
