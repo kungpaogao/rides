@@ -42,8 +42,8 @@ export default function Home() {
   };
 
   return (
-    <div className="w-full max-w-5xl py-7">
-      <h2 className="mt-7 text-5xl font-bold">
+    <div className="w-full max-w-5xl py-7 lg:mx-auto">
+      <h2 className="mt-8 text-5xl font-bold md:mt-16">
         Carpool with <br />
         other students
       </h2>
@@ -98,8 +98,7 @@ export default function Home() {
         />
         <BasicButton
           className="mx-3 mb-3 flex w-full items-center justify-center 
-          !rounded-lg !border-black bg-black py-3 text-white 
-          hover:shadow-lg md:mb-0 md:aspect-square md:w-12"
+          !rounded-lg py-3 hover:shadow-lg md:mb-0 md:aspect-square md:w-12"
           type="submit"
         >
           <FiSearch size={20} title="Search" />
@@ -112,7 +111,7 @@ export default function Home() {
         <span className="flex-1 border-b-2" />
       </div>
       <BasicButton
-        className="w-full !rounded-lg bg-black !py-5 text-white"
+        className="w-full !rounded-lg !py-5"
         onClick={() => push("/ride/new")}
       >
         Post a ride

@@ -11,16 +11,17 @@ model Ride {
   id        String   @id @unique(map: "unique_id") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   datetime  DateTime @default(now()) @db.Timestamptz(6)
-  fromLat   Float
-  fromLng   Float
-  fromAddr  String   @default("\"\"")
-  toLat     Float
-  toLng     Float
-  toAddr    String   @default("\"\"")
   numSeats  Int      @default(0) @db.SmallInt
   phone     String   @default("\"\"")
   email     String   @default("\"\"")
   user      String   @db.Uuid
+  fromLat   Float
+  fromLng   Float
+  toLat     Float
+  toLng     Float
+  fromAddr  String   @default("\"\"")
+  toAddr    String   @default("\"\"")
+  price     Int      @default(0)
   users     User     @relation(fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("rides")
