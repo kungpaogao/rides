@@ -42,8 +42,8 @@ export default function Home() {
   };
 
   return (
-    <div className="w-full py-7">
-      <h2 className="text-5xl font-bold">
+    <div className="w-full max-w-5xl py-7">
+      <h2 className="mt-7 text-5xl font-bold">
         Carpool with <br />
         other students
       </h2>
@@ -53,12 +53,15 @@ export default function Home() {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="mx-auto mt-12 flex max-w-5xl items-center rounded-lg border bg-gray-100 p-1"
+        className="mx-auto mt-12 flex flex-wrap items-center gap-2 rounded-lg
+         border bg-gray-100 p-1 md:flex-nowrap"
       >
         <PlaceSearchInput
           label="From"
           placeholder="Ithaca, NY"
-          className="group mr-2 flex-1 rounded-md border border-gray-100 p-3 focus-within:border-gray-200 focus-within:bg-white focus-within:shadow-lg"
+          className="group w-full rounded-md border 
+          border-gray-100 p-3 focus-within:border-gray-200 
+          focus-within:bg-white focus-within:shadow-lg md:flex-1"
           labelClassName="px-2"
           inputClassName="w-full border-none bg-transparent"
           autocompleteRef={searchFromAutocompleteRef}
@@ -71,7 +74,9 @@ export default function Home() {
         <PlaceSearchInput
           label="To"
           placeholder="New York, NY"
-          className="group mr-2 flex-1 rounded-md border border-gray-100 p-3 focus-within:border-gray-200 focus-within:bg-white focus-within:shadow-lg"
+          className="group w-full rounded-md border 
+          border-gray-100 p-3 focus-within:border-gray-200 
+          focus-within:bg-white focus-within:shadow-lg md:flex-1"
           labelClassName="px-2"
           inputClassName="w-full border-none bg-transparent"
           autocompleteRef={searchToAutocompleteRef}
@@ -84,24 +89,32 @@ export default function Home() {
         <BasicInput
           label="Date"
           type="date"
-          className="group mr-2 flex-1 rounded-md border border-gray-100 p-3 focus-within:border-gray-200 focus-within:bg-white focus-within:shadow-lg"
+          className="group w-full rounded-md border border-gray-100 
+          p-3 focus-within:border-gray-200 focus-within:bg-white 
+          focus-within:shadow-lg md:flex-1"
           labelClassName="px-2"
           inputClassName="w-full border-none bg-transparent"
           {...register("datetime", { valueAsDate: true })}
         />
         <BasicButton
-          className="mx-3 aspect-square w-12 rounded-lg border-black bg-black !p-3 text-white hover:shadow-lg"
+          className="mx-3 mb-3 flex w-full items-center justify-center 
+          !rounded-lg !border-black bg-black py-3 text-white 
+          hover:shadow-lg md:mb-0 md:aspect-square md:w-12"
           type="submit"
         >
-          <FiSearch className="h-full w-full" title="Search" />
+          <FiSearch size={20} title="Search" />
+          <span className="ml-2 md:hidden">Search</span>
         </BasicButton>
       </form>
-      <div className="flex w-full items-center gap-5">
+      <div className="my-7 flex w-full items-center gap-5">
         <span className="flex-1 border-b-2" />
         <p>or</p>
         <span className="flex-1 border-b-2" />
       </div>
-      <BasicButton className="w-full" onClick={() => push("/ride/new")}>
+      <BasicButton
+        className="w-full !rounded-lg bg-black !py-5 text-white"
+        onClick={() => push("/ride/new")}
+      >
         Post a ride
       </BasicButton>
     </div>
