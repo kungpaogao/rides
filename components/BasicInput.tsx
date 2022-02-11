@@ -33,7 +33,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
         <input
           ref={ref}
           className={`rounded border px-2 py-1 ${
-            expand && "w-full md:w-auto"
+            expand && "w-full"
           } ${inputClassName}`}
           id={name}
           name={name}
