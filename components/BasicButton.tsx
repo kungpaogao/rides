@@ -12,7 +12,7 @@ const BasicButton = forwardRef<HTMLButtonElement, BasicButtonProps>(
       <button
         ref={ref}
         className={`rounded border border-black bg-black px-2 py-1 
-        text-white shadow transition hover:shadow-md ${
+        text-white shadow transition hover:shadow-md focus:shadow-md ${
           expand && "w-full md:w-auto"
         } ${className}`}
         {...rest}

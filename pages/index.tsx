@@ -52,6 +52,7 @@ export default function Home() {
       </h3>
 
       <form
+        autoComplete="off"
         onSubmit={handleSubmit(onSubmit)}
         className="mx-auto mt-12 flex flex-wrap items-center gap-2 rounded-lg
          border bg-gray-100 p-1 md:flex-nowrap"
@@ -98,7 +99,7 @@ export default function Home() {
         />
         <BasicButton
           className="mx-3 mb-3 flex w-full items-center justify-center 
-          !rounded-lg py-3 hover:shadow-lg md:mb-0 md:aspect-square md:w-12"
+          !rounded-lg !py-3 hover:shadow-lg md:mb-0 md:aspect-square md:w-12"
           type="submit"
         >
           <FiSearch size={20} title="Search" />

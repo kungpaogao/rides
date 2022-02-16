@@ -60,8 +60,9 @@ export default function CreateRide() {
   return (
     <div className="flex w-full items-center justify-center">
       <form
+        autoComplete="off"
         onSubmit={handleSubmit(onSubmit)}
-        className="prose w-full md:w-auto"
+        className="prose w-full py-7 md:w-auto"
       >
         <h2>Ride Information</h2>
         <PlaceSearchInput
