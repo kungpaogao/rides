@@ -1,12 +1,11 @@
-import BasicButton from "../components/BasicButton";
-import BasicDropdown from "../components/BasicDropdown";
-import BasicDropdownItem from "../components/BasicDropdownItem";
 import PageStatus from "../types/PageStatus";
 import { useFetchStatus } from "../lib/useFetchStatus";
-import { Ride } from "@prisma/client";
 import { useRouter } from "next/router";
 import Loading from "../components/Loading";
 import { queryToString } from "../lib/queryToString";
+import SearchResult from "../components/SearchResult";
+import SearchFilters from "../components/SearchFilters";
+import { SearchRideResult } from "../types/SearchRide";
 
 export default function Search() {
   const { push, pathname, query } = useRouter();
@@ -23,15 +22,13 @@ export default function Search() {
     data: results,
     error,
     status: pageStatus,
-  } = useFetchStatus<Ride[], Error>(`/api/rides?${urlSearchParams()}`);
-
-  function copyToClipboard(value: string) {
-    navigator.clipboard.writeText(value);
-  }
+  } = useFetchStatus<SearchRideResult[], Error>(
+    `/api/rides?${urlSearchParams()}`
+  );
 
   if (pageStatus === PageStatus.Idle || pageStatus === PageStatus.Loading) {
     return (
-      <div className="prose w-full prose-h3:mt-0">
+      <div className="prose w-full max-w-full py-7 prose-h3:mt-0">
         <h2>Results</h2>
         <div className="flex flex-col items-center justify-center gap-3">
           <Loading />
@@ -46,7 +43,7 @@ export default function Search() {
     }
 
     return (
-      <div className="prose w-full prose-h3:mt-0">
+      <div className="prose w-full max-w-full py-7 prose-h3:mt-0">
         <h2>Results</h2>
         <div className="flex flex-col items-center justify-center gap-3">
           {error?.message || "Something went wrong :("}
@@ -57,51 +54,18 @@ export default function Search() {
 
   if (pageStatus === PageStatus.Success && results) {
     return (
-      <div className="prose w-full prose-h3:mt-0">
+      <div className="prose w-full max-w-full py-7 prose-h3:mt-0">
         <h2>Results</h2>
-        <div className="flex flex-col gap-3">
-          {results.map(
-            ({ id, from, to, datetime, numSeats, email, phone }: any) => (
-              <div
-                key={id}
-                className="flex flex-row flex-wrap rounded-md border border-gray-300 p-5"
-              >
-                <div className="w-full md:flex-1">
-                  <h3>
-                    {from} to {to}
-                  </h3>
-                  <h4>{datetime.toLocaleString()}</h4>
-                  {numSeats} seats
-                </div>
-                <div className="w-full md:w-auto">
-                  <BasicDropdown
-                    trigger={
-                      <BasicButton className="w-full">Email</BasicButton>
-                    }
-                  >
-                    <BasicDropdownItem>
-                      <a href={`mailto:${email}`}>Send email</a>
-                    </BasicDropdownItem>
-                    <BasicDropdownItem onClick={() => copyToClipboard(email)}>
-                      Copy email
-                    </BasicDropdownItem>
-                  </BasicDropdown>
-                  <BasicDropdown
-                    trigger={
-                      <BasicButton className="w-full">Phone</BasicButton>
-                    }
-                  >
-                    <BasicDropdownItem>
-                      <a href={`tel:${phone}`}>Call phone</a>
-                    </BasicDropdownItem>
-                    <BasicDropdownItem onClick={() => copyToClipboard(phone)}>
-                      Copy phone
-                    </BasicDropdownItem>
-                  </BasicDropdown>
-                </div>
-              </div>
-            )
-          )}
+
+        <div>
+          <h3>Filters</h3>
+          <SearchFilters />
+        </div>
+
+        <div className="mt-5 flex w-full flex-col gap-3">
+          {results.map((result) => (
+            <SearchResult key={result.id} result={result} />
+          ))}
         </div>
       </div>
     );
