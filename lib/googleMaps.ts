@@ -31,6 +31,7 @@ export const client = new Client({});
 export async function geocode(addresses: string[]): Promise<LatLngLiteral[]> {
   const geoResponses = await Promise.all(
     addresses.map((address) =>
+      // TODO: fail on bad geocoding request
       client.geocode({
         params: {
           key: process.env.GEOCODING_API_KEY || "",
