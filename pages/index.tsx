@@ -6,13 +6,13 @@ import { FiSearch } from "react-icons/fi";
 import BasicButton from "../components/BasicButton";
 import BasicInput from "../components/BasicInput";
 import PlaceSearchInput from "../components/PlaceSearchInput";
-import { SearchRide, SearchRideSchema } from "../types/SearchRide";
+import { SearchRideQuery, SearchRideQuerySchema } from "../types/SearchRide";
 
 export default function Home() {
   const { push } = useRouter();
 
-  const { register, handleSubmit, setValue } = useForm<SearchRide>({
-    resolver: zodResolver(SearchRideSchema),
+  const { register, handleSubmit, setValue } = useForm<SearchRideQuery>({
+    resolver: zodResolver(SearchRideQuerySchema),
   });
 
   const searchFromAutocompleteRef = useRef<HTMLInputElement | null>(null);
@@ -28,7 +28,7 @@ export default function Home() {
     },
   });
 
-  const onSubmit: SubmitHandler<SearchRide> = async ({
+  const onSubmit: SubmitHandler<SearchRideQuery> = async ({
     from,
     to,
     datetime,

@@ -1,28 +1,23 @@
+import { Ride } from "@prisma/client";
 import { z } from "zod";
 
-export type SearchRide = {
+export type SearchRideQuery = {
   datetime: Date;
   from: string;
   to: string;
 };
 
-export type SearchRideResult = {
-  id: string;
-  datetime: Date;
-  from: string;
-  to: string;
-  numSeats: number;
-  phone: string;
-  email: string;
+export type SearchRideResult = Ride & {
+  distance: number;
 };
 
-const SearchRideSchema = z.object({
+const SearchRideQuerySchema = z.object({
   datetime: z.date(),
   from: z.string().min(1),
   to: z.string().min(1),
 });
 
-const SearchRideDbSchema = z.object({
+const SearchRideQueryDbSchema = z.object({
   flat: z.number(),
   flng: z.number(),
   frad: z.number().int().positive(),
@@ -33,4 +28,4 @@ const SearchRideDbSchema = z.object({
   dayrange: z.number().int().positive(),
 });
 
-export { SearchRideSchema, SearchRideDbSchema };
+export { SearchRideQuerySchema, SearchRideQueryDbSchema };

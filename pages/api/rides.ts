@@ -1,11 +1,10 @@
-import { Ride } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { geocode } from "../../lib/googleMaps";
 import { prisma } from "../../lib/prismaClient";
 import { queryToString } from "../../lib/queryToString";
 import { supabase } from "../../lib/supabaseClient";
 import { NewRide, NewRideSchema } from "../../types/NewRide";
-import { SearchRideDbSchema, SearchRideResult } from "../../types/SearchRide";
+import { SearchRideQueryDbSchema } from "../../types/SearchRide";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   // check authorization
@@ -28,7 +27,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       const { from, to, frad = 100000, trad = 100000, dt, dr = 10 } = req.query;
 
-      if(!from || !to) throw new Error();
+      if (!from || !to) throw new Error();
 
       const [{ lat: flat, lng: flng }, { lat: tlat, lng: tlng }] =
         await geocode([queryToString(from), queryToString(to)]);
@@ -45,24 +44,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       };
 
       // validate request
-      SearchRideDbSchema.parse(args);
+      SearchRideQueryDbSchema.parse(args);
 
       // call db function
-      const { data, error } = await supabase.rpc("search_rides", args);
+      // TODO: update rpc function to return SearchRideResult
+      const { data: rides, error } = await supabase.rpc("search_rides", args);
 
-      if (error || !data) throw error;
-
-      const rides: SearchRideResult[] | null = data.map((ride: Ride) => {
-        return {
-          id: ride.id,
-          datetime: ride.datetime,
-          from: ride.fromAddr,
-          to: ride.toAddr,
-          numSeats: ride.numSeats,
-          phone: ride.phone,
-          email: ride.email,
-        };
-      });
+      if (error || !rides) throw error;
 
       res.status(200).json(rides);
     } catch (err) {
