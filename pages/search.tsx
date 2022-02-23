@@ -9,7 +9,7 @@ import SearchFilters from "../components/SearchFilters";
 import { SearchRideResult } from "../types/SearchRide";
 
 export default function Search() {
-  const { pathname, query } = useRouter();
+  const { pathname, query, isReady } = useRouter();
 
   const urlSearchParams = () => {
     let params: any = {};
@@ -24,7 +24,7 @@ export default function Search() {
     error,
     status: pageStatus,
   } = useFetchStatus<SearchRideResult[], Error>(
-    `/api/rides?${urlSearchParams()}`
+    isReady ? `/api/rides?${urlSearchParams()}` : null
   );
 
   if (pageStatus === PageStatus.Idle || pageStatus === PageStatus.Loading) {

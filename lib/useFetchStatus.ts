@@ -2,7 +2,7 @@ import useSWR from "swr";
 import PageStatus from "../types/PageStatus";
 import { basicFetchWithAuth } from "./basicFetch";
 
-export function useFetchStatus<T, E>(request: RequestInfo) {
+export function useFetchStatus<T, E>(request: RequestInfo | null) {
   const { data, error } = useSWR<T, E>(request, basicFetchWithAuth, {
     onErrorRetry: (error: any) => {
       // do not retry on 401, 403, 404
