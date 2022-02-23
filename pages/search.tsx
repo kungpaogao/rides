@@ -1,6 +1,7 @@
 import PageStatus from "../types/PageStatus";
-import { useFetchStatus } from "../lib/useFetchStatus";
+import Link from "next/link";
 import { useRouter } from "next/router";
+import { useFetchStatus } from "../lib/useFetchStatus";
 import Loading from "../components/Loading";
 import { queryToString } from "../lib/queryToString";
 import SearchResult from "../components/SearchResult";
@@ -8,7 +9,7 @@ import SearchFilters from "../components/SearchFilters";
 import { SearchRideResult } from "../types/SearchRide";
 
 export default function Search() {
-  const { push, pathname, query } = useRouter();
+  const { pathname, query } = useRouter();
 
   const urlSearchParams = () => {
     let params: any = {};
@@ -38,16 +39,24 @@ export default function Search() {
   }
 
   if (pageStatus === PageStatus.Error) {
-    if (error?.name === "401") {
-      push(`/login?redirect=${pathname}`);
-    }
-
     return (
       <div className="prose w-full max-w-full py-7 prose-h3:mt-0">
         <h2>Results</h2>
-        <div className="flex flex-col items-center justify-center gap-3">
-          {error?.message || "Something went wrong :("}
-        </div>
+        {error?.name === "401" ? (
+          <div className="flex items-center justify-center">
+            <p>
+              Please{" "}
+              <Link href={`/login?redirect=${pathname}${urlSearchParams()}`}>
+                log in
+              </Link>
+              .
+            </p>
+          </div>
+        ) : (
+          <div className="flex items-center justify-center">
+            {error?.message || "Something went wrong :("}
+          </div>
+        )}
       </div>
     );
   }
@@ -58,7 +67,6 @@ export default function Search() {
         <h2>Results</h2>
 
         <div>
-          <h3>Filters</h3>
           <SearchFilters />
         </div>
 

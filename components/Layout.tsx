@@ -19,7 +19,7 @@ export default function Layout({ children }: LayoutProps) {
         <Navigation className="px-5 lg:px-28" />
       </nav>
 
-      <main className="flex w-full flex-1 px-5 lg:px-28">{children}</main>
+      <main className="w-full flex-1 px-5 lg:px-28">{children}</main>
 
       <footer className="w-full">
         <Footer />
