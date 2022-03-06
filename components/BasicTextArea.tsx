@@ -1,22 +1,22 @@
-import { forwardRef, InputHTMLAttributes } from "react";
+import { forwardRef, TextareaHTMLAttributes } from "react";
 
-export type BasicInputProps = InputHTMLAttributes<HTMLInputElement> & {
+export type BasicTextAreaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   label: string;
   className?: string;
   labelClassName?: string;
-  inputClassName?: string;
+  textAreaClassName?: string;
   expand?: boolean;
   error?: string;
 };
 
-const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
+const BasicTextArea = forwardRef<HTMLTextAreaElement, BasicTextAreaProps>(
   (
     {
       name,
       label,
       className = "",
       labelClassName = "",
-      inputClassName = "",
+      textAreaClassName = "",
       expand = "",
       error,
       ...rest
@@ -30,11 +30,11 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
             {label}
           </label>
         )}
-        <input
+        <textarea
           ref={ref}
           className={`rounded border px-2 py-1 disabled:bg-gray-100 ${
             expand && "w-full"
-          } ${inputClassName}`}
+          } ${textAreaClassName}`}
           id={name}
           name={name}
           {...rest}
@@ -45,4 +45,4 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
   }
 );
 
-export default BasicInput;
+export default BasicTextArea;
