@@ -16,6 +16,7 @@
     "@mantine/notifications": "^3.6.4",
     "@prisma/client": "^3.8.1",
     "@radix-ui/react-accordion": "^0.1.5",
+    "@radix-ui/react-dialog": "^0.1.7",
     "@radix-ui/react-dropdown-menu": "^0.1.4",
     "@radix-ui/react-popover": "^0.1.4",
     "@supabase/supabase-js": "^1.29.1",
@@ -28,6 +29,7 @@
     "react-hook-form": "^7.24.1",
     "react-icons": "^4.3.1",
     "swr": "^1.1.2",
+    "tailwindcss-plugin-defaults": "^0.1.5",
     "tailwindcss-radix": "^1.6.0",
     "zod": "^3.11.6"
   },

@@ -31,5 +31,9 @@ module.exports = {
   plugins: [
     require('@tailwindcss/typography'),
     require("tailwindcss-radix")(),
+    require('tailwindcss-plugin-defaults'),
   ],
+  corePlugins: {
+    preflight: false,
+  }
 }
