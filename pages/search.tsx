@@ -1,4 +1,4 @@
-import PageStatus from "../types/PageStatus";
+import { useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useFetchStatus } from "../lib/useFetchStatus";
@@ -7,24 +7,25 @@ import { queryToString } from "../lib/queryToString";
 import SearchResult from "../components/SearchResult";
 import SearchFilters from "../components/SearchFilters";
 import { SearchRideResult } from "../types/SearchRide";
+import PageStatus from "../types/PageStatus";
 
 export default function Search() {
   const { pathname, query, isReady } = useRouter();
 
-  const urlSearchParams = () => {
+  const urlSearchParams = useMemo(() => {
     let params: any = {};
     Object.keys(query).forEach((k) => {
       params[k] = queryToString(query[k]);
     });
     return new URLSearchParams(params);
-  };
+  }, [query]);
 
   const {
     data: results,
     error,
     status: pageStatus,
   } = useFetchStatus<SearchRideResult[], Error>(
-    isReady ? `/api/rides?${urlSearchParams()}` : null
+    isReady ? `/api/rides?${urlSearchParams}` : null
   );
 
   if (pageStatus === PageStatus.Idle || pageStatus === PageStatus.Loading) {
@@ -46,7 +47,7 @@ export default function Search() {
           <div className="flex items-center justify-center">
             <p>
               Please{" "}
-              <Link href={`/login?redirect=${pathname}${urlSearchParams()}`}>
+              <Link href={`/login?redirect=${pathname}${urlSearchParams}`}>
                 log in
               </Link>
               .
