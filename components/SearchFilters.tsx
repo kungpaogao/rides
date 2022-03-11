@@ -1,180 +1,243 @@
-import { SetStateAction, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  PropsWithChildren,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import BasicButton from "./BasicButton";
 import { FiX } from "react-icons/fi";
-import { RangeCalendar, TimeRangeInput } from "@mantine/dates";
-import { Slider } from "@mantine/core";
-import BasicInput from "./BasicInput";
+import { SearchRideResult } from "../types/SearchRide";
+import dayjs from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
+import SearchFilterPrice from "./SearchFilterPrice";
+import SearchFilterDistance from "./SearchFilterDistance";
+import SearchFilterDate from "./SearchFilterDate";
 
 type SearchFiltersProps = {
+  data?: SearchRideResult[];
   className?: string;
-  onShowSearchFilters?: React.Dispatch<SetStateAction<boolean>>;
+  onShowSearchFilters?: Dispatch<SetStateAction<boolean>>;
+  onApplyFilters?: Dispatch<SetStateAction<SearchRideResult[] | undefined>>;
 };
 
-type FilterContentProps = {
-  filter: FilterType;
+export type SearchFilterProps = {
+  value: any;
+  setValue: Dispatch<SetStateAction<any>>;
 };
 
-type FilterType = "price" | "date" | "time" | "distance";
+type Filter = {
+  id: string;
+  title: string;
+  filter: (comp: any) => (ride: SearchRideResult) => boolean;
+  reset: () => void;
+  setValue: any;
+  content: any;
+  activeFilter?: (ride: SearchRideResult) => boolean;
+  activeValue?: any;
+};
 
-function FilterContent({ filter }: FilterContentProps) {
-  const [dateRange, setDateRange] = useState<[Date, Date]>([
-    new Date(),
-    new Date(),
+export const FilterContext = createContext<any>(null);
+
+export function FilterContextProvider({ children }: PropsWithChildren<any>) {
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
   ]);
+  const [maxPrice, setMaxPrice] = useState<number>(100);
+  const [maxDistance, setMaxDistance] = useState<number>(100);
 
-  const [timeRange, setTimeRange] = useState<[Date, Date]>([
-    new Date(),
-    new Date(),
-  ]);
+  const value = {
+    date: [dateRange, setDateRange],
+    price: [maxPrice, setMaxPrice],
+    distance: [maxDistance, setMaxDistance],
+  };
 
-  const [maxPrice, setMaxPrice] = useState(40);
-
-  const [maxDistance, setMaxDistance] = useState(10);
-
-  switch (filter) {
-    case "date":
-      return (
-        <>
-          <RangeCalendar
-            className="mx-auto"
-            value={dateRange}
-            onChange={setDateRange}
-          />
-        </>
-      );
-    case "time":
-      return (
-        <>
-          <TimeRangeInput
-            label="Time range"
-            value={timeRange}
-            onChange={setTimeRange}
-          />
-        </>
-      );
-    case "price":
-      return (
-        <>
-          <Slider
-            min={0}
-            max={100}
-            step={10}
-            value={maxPrice}
-            onChange={setMaxPrice}
-            label={(value) => `$${value}`}
-          />
-          <BasicInput
-            label="Max price"
-            value={maxPrice}
-            type="number"
-            min={0}
-            max={100}
-            step={10}
-            onChange={(e) => setMaxPrice(parseInt(e.target.value) || 0)}
-          />
-        </>
-      );
-    case "distance":
-      return (
-        <>
-          <Slider
-            min={10}
-            max={100}
-            step={10}
-            value={maxDistance}
-            onChange={setMaxDistance}
-            label={(value) => `${value} miles`}
-          />
-          <BasicInput
-            label="Max distance"
-            value={maxDistance}
-            type="number"
-            min={10}
-            max={100}
-            step={10}
-            onChange={(e) => setMaxDistance(parseInt(e.target.value) || 10)}
-          />
-        </>
-      );
-  }
+  return (
+    <FilterContext.Provider value={value}>{children}</FilterContext.Provider>
+  );
 }
 
 export default function SearchFilters({
+  data,
   className,
-  onShowSearchFilters,
+  onApplyFilters,
 }: SearchFiltersProps) {
-  const [currentFilter, setCurrentFilter] = useState<FilterType | null>(null);
+  /** dialog state */
+  const [dialogFilter, setDialogFilter] = useState<Filter | null>(null);
   const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
 
-  function showFilter(filter: FilterType) {
+  /** controlled input states */
+  const filterState = useContext(FilterContext);
+
+  const {
+    date: [, setDateRange],
+    price: [, setMaxPrice],
+    distance: [, setMaxDistance],
+  } = filterState;
+
+  const [activeFilters, setActiveFilters] = useState<{ [key: string]: Filter }>(
+    {}
+  );
+
+  /**
+   * Set filter to show in dialog and open dialog
+   */
+  function showFilter(filter: Filter) {
     return () => {
-      setCurrentFilter(filter);
+      setDialogFilter(filter);
       setIsFilterDialogOpen(true);
     };
   }
+
+  /**
+   * Add filter to active filters
+   */
+  function saveFilter() {
+    if (dialogFilter) {
+      const value = filterState[dialogFilter.id][0];
+
+      const newFilters = {
+        ...activeFilters,
+        [dialogFilter.id]: {
+          ...dialogFilter,
+          activeValue: value,
+          activeFilter: dialogFilter.filter(value),
+        },
+      };
+
+      setActiveFilters(newFilters);
+    }
+  }
+
+  /**
+   * Apply filters when active filters change
+   */
+  useEffect(() => {
+    onApplyFilters?.(getFilteredData());
+  }, [activeFilters]);
+
+  /**
+   * Reset filter to default value
+   */
+  function clearFilter() {
+    dialogFilter?.reset();
+  }
+
+  /**
+   * Returns filtered data
+   */
+  function getFilteredData() {
+    dayjs.extend(isBetween);
+    let filteredData = data;
+
+    Object.keys(activeFilters).forEach((filterKey) => {
+      const { activeFilter } = activeFilters[filterKey];
+      filteredData = filteredData?.filter(activeFilter!);
+    });
+
+    return filteredData;
+  }
+
+  /**
+   * Closes dialog and resets filter state if it's inactive, or sets the filter
+   * state to the active value
+   */
+  function closeDialog() {
+    if (dialogFilter && activeFilters[dialogFilter.id] === undefined) {
+      clearFilter();
+    } else if (dialogFilter) {
+      dialogFilter.setValue(activeFilters[dialogFilter.id].activeValue);
+    }
+
+    setIsFilterDialogOpen(false);
+  }
+
+  let filters: Filter[] = [
+    {
+      id: "price",
+      title: "Price",
+      filter: (comp: number) => (ride: SearchRideResult) => ride.price <= comp,
+      reset: () => setMaxPrice(100),
+      setValue: setMaxPrice,
+      content: SearchFilterPrice,
+    },
+    {
+      id: "distance",
+      title: "Distance",
+      filter: (comp: number) => (ride: SearchRideResult) =>
+        ride.fromDistance <= comp && ride.toDistance <= comp,
+      reset: () => setMaxDistance(100),
+      setValue: setMaxDistance,
+      content: SearchFilterDistance,
+    },
+    {
+      id: "date",
+      title: "Date",
+      filter: (comp: [Date, Date]) => (ride: SearchRideResult) =>
+        dayjs(ride.datetime).isBetween(comp[0], comp[1], "day", "[]"),
+      reset: () => setDateRange([null, null]),
+      setValue: setDateRange,
+      content: SearchFilterDate,
+    },
+  ];
 
   return (
     <div className={`flex w-full flex-row gap-3 ${className}`}>
       <Dialog.Root open={isFilterDialogOpen}>
         <Dialog.Portal>
-          <Dialog.Overlay className="fixed top-0 bottom-0 left-0 right-0 flex items-center justify-center bg-black/20">
-            <Dialog.Content className="mx-auto w-96 rounded-md border bg-white shadow-lg">
-              <div className="flex items-center border-b p-3">
+          <Dialog.Overlay className="fixed top-0 bottom-0 left-0 right-0 flex animate-dialog-overlay-show items-center justify-center bg-black/20 transition-all">
+            <Dialog.Content
+              className="mx-auto w-96 animate-dialog-content-show rounded-md border bg-white shadow-lg"
+              onEscapeKeyDown={closeDialog}
+              onInteractOutside={closeDialog}
+            >
+              <div className="flex items-center border-b">
+                <Dialog.Title className="flex-1 p-3 text-center font-semibold">
+                  Filter by {dialogFilter?.id || ""}
+                </Dialog.Title>
                 <Dialog.Close asChild>
                   <BasicButton
                     flat
-                    className="fixed border-none bg-white p-0 text-black"
-                    onClick={() => setIsFilterDialogOpen(false)}
+                    className="mr-1 rounded-full border-none bg-white p-3 text-black"
+                    onClick={closeDialog}
                   >
                     <FiX />
                   </BasicButton>
                 </Dialog.Close>
-                <Dialog.Title className="flex-1 text-center font-bold">
-                  Filter {currentFilter}
-                </Dialog.Title>
               </div>
               <div className="p-3">
-                {currentFilter && <FilterContent filter={currentFilter} />}
+                {dialogFilter && dialogFilter.content()}
               </div>
               <div className="border-t p-3">
                 <BasicButton
                   flat
                   className="border-gray-200 bg-white text-black"
+                  onClick={clearFilter}
                 >
                   Clear
                 </BasicButton>
-                <BasicButton className="float-right">Save</BasicButton>
+                <BasicButton onClick={saveFilter} className="float-right">
+                  Save
+                </BasicButton>
               </div>
             </Dialog.Content>
           </Dialog.Overlay>
         </Dialog.Portal>
       </Dialog.Root>
 
-      <BasicButton
-        onClick={showFilter("price")}
-        className="rounded-full bg-white px-3 text-black"
-      >
-        Price
-      </BasicButton>
-      <BasicButton
-        onClick={showFilter("distance")}
-        className="rounded-full bg-white px-3 text-black"
-      >
-        Distance
-      </BasicButton>
-      <BasicButton
-        onClick={showFilter("date")}
-        className="rounded-full bg-white px-3 text-black"
-      >
-        Dates
-      </BasicButton>
-      <BasicButton
-        onClick={showFilter("time")}
-        className="rounded-full bg-white px-3 text-black"
-      >
-        Time
-      </BasicButton>
+      {filters.map((filter) => (
+        <BasicButton
+          key={filter.id}
+          onClick={showFilter(filter)}
+          className="rounded-full bg-white px-3 text-black"
+        >
+          {filter.title}
+        </BasicButton>
+      ))}
     </div>
   );
 }

@@ -1,11 +1,13 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useFetchStatus } from "../lib/useFetchStatus";
 import Loading from "../components/Loading";
 import { queryToString } from "../lib/queryToString";
 import SearchResult from "../components/SearchResult";
-import SearchFilters from "../components/SearchFilters";
+import SearchFilters, {
+  FilterContextProvider,
+} from "../components/SearchFilters";
 import { SearchRideResult } from "../types/SearchRide";
 import PageStatus from "../types/PageStatus";
 
@@ -28,16 +30,7 @@ export default function Search() {
     isReady ? `/api/rides?${urlSearchParams}` : null
   );
 
-  if (pageStatus === PageStatus.Idle || pageStatus === PageStatus.Loading) {
-    return (
-      <div className="prose w-full max-w-full py-7 prose-h3:mt-0">
-        <h2>Results</h2>
-        <div className="flex flex-col items-center justify-center gap-3">
-          <Loading />
-        </div>
-      </div>
-    );
-  }
+  const [filteredResults, setFilteredResults] = useState(results);
 
   if (pageStatus === PageStatus.Error) {
     return (
@@ -68,15 +61,26 @@ export default function Search() {
         <h2>Results</h2>
 
         <div>
-          <SearchFilters />
+          <FilterContextProvider>
+            <SearchFilters data={results} onApplyFilters={setFilteredResults} />
+          </FilterContextProvider>
         </div>
 
         <div className="mt-5 flex w-full flex-col gap-3">
-          {results.map((result) => (
+          {(filteredResults || results).map((result) => (
             <SearchResult key={result.id} result={result} />
           ))}
         </div>
       </div>
     );
   }
+
+  return (
+    <div className="prose w-full max-w-full py-7 prose-h3:mt-0">
+      <h2>Results</h2>
+      <div className="flex flex-col items-center justify-center gap-3">
+        <Loading />
+      </div>
+    </div>
+  );
 }

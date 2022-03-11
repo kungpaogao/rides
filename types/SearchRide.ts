@@ -8,7 +8,8 @@ export type SearchRideQuery = {
 };
 
 export type SearchRideResult = Ride & {
-  distance: number;
+  fromDistance: number;
+  toDistance: number;
 };
 
 const SearchRideQuerySchema = z.object({
