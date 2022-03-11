@@ -19,12 +19,24 @@ module.exports = {
           "0%": { opacity: 0, transform: "translateY(10px)" },
           "100%": { opacity: 1, transform: "translateY(0)" },
         },
+        // dialog
+        "content-show": {
+          '0%': { opacity: 0, transform: 'scale(.96)' },
+          '100%': { opacity: 1, transform: 'scale(1)' },
+        },
+        "fade-in": {
+          '0%': { opacity: 0 },
+          '100%': { opacity: 1 },
+        }
       },
       animation: {
         // Dropdown menu
         "scale-in": "scale-in 0.2s ease-in-out",
         "slide-down": "slide-down 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
         "slide-up": "slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+        // dialog
+        "dialog-content-show": "content-show 150ms cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        "dialog-overlay-show": "fade-in 150ms cubic-bezier(0.16, 1, 0.3, 1) forwards"
       }
     },
   },
