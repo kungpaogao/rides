@@ -83,6 +83,35 @@ export default function SearchFilters({
     {}
   );
 
+  let filters: Filter[] = [
+    {
+      id: "price",
+      title: "Price",
+      filter: (comp: number) => (ride: SearchRideResult) => ride.price <= comp,
+      reset: () => setMaxPrice(100),
+      setValue: setMaxPrice,
+      content: SearchFilterPrice,
+    },
+    {
+      id: "distance",
+      title: "Distance",
+      filter: (comp: number) => (ride: SearchRideResult) =>
+        ride.fromDistance <= comp && ride.toDistance <= comp,
+      reset: () => setMaxDistance(100),
+      setValue: setMaxDistance,
+      content: SearchFilterDistance,
+    },
+    {
+      id: "date",
+      title: "Date",
+      filter: (comp: [Date, Date]) => (ride: SearchRideResult) =>
+        dayjs(ride.datetime).isBetween(comp[0], comp[1], "day", "[]"),
+      reset: () => setDateRange([null, null]),
+      setValue: setDateRange,
+      content: SearchFilterDate,
+    },
+  ];
+
   /**
    * Set filter to show in dialog and open dialog
    */
@@ -111,6 +140,8 @@ export default function SearchFilters({
 
       setActiveFilters(newFilters);
     }
+
+    closeDialog();
   }
 
   /**
@@ -155,35 +186,6 @@ export default function SearchFilters({
 
     setIsFilterDialogOpen(false);
   }
-
-  let filters: Filter[] = [
-    {
-      id: "price",
-      title: "Price",
-      filter: (comp: number) => (ride: SearchRideResult) => ride.price <= comp,
-      reset: () => setMaxPrice(100),
-      setValue: setMaxPrice,
-      content: SearchFilterPrice,
-    },
-    {
-      id: "distance",
-      title: "Distance",
-      filter: (comp: number) => (ride: SearchRideResult) =>
-        ride.fromDistance <= comp && ride.toDistance <= comp,
-      reset: () => setMaxDistance(100),
-      setValue: setMaxDistance,
-      content: SearchFilterDistance,
-    },
-    {
-      id: "date",
-      title: "Date",
-      filter: (comp: [Date, Date]) => (ride: SearchRideResult) =>
-        dayjs(ride.datetime).isBetween(comp[0], comp[1], "day", "[]"),
-      reset: () => setDateRange([null, null]),
-      setValue: setDateRange,
-      content: SearchFilterDate,
-    },
-  ];
 
   return (
     <div className={`flex w-full flex-row gap-3 ${className}`}>
