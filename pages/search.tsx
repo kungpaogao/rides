@@ -27,7 +27,7 @@ export default function Search() {
     error,
     status: pageStatus,
   } = useFetchStatus<SearchRideResult[], Error>(
-    isReady ? `/api/rides?${urlSearchParams}` : null
+    isReady ? `/api/ride/search?${urlSearchParams}` : null
   );
 
   const [filteredResults, setFilteredResults] = useState(results);

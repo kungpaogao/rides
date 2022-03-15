@@ -1220,6 +1220,11 @@ function-bind@^1.1.1:
   resolved "https://registry.yarnpkg.com/function-bind/-/function-bind-1.1.1.tgz#a56899d3ea3c9bab874bb9773b7c5ede92f4895d"
   integrity sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A==
 
+geolib@^3.3.3:
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/geolib/-/geolib-3.3.3.tgz#17f5a0dcdc0b051bd631b66f7131d2c14c54a15b"
+  integrity sha512-YO704pzdB/8QQekQuDmFD5uv5RAwAf4rOUPdcMhdEOz+HoPWD0sC7Qqdwb+LAvwIjXVRawx0QgZlocKYh8PFOQ==
+
 get-nonce@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/get-nonce/-/get-nonce-1.0.1.tgz#fdf3f0278073820d2ce9426c18f07481b1e0cdf3"
