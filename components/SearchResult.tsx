@@ -1,6 +1,6 @@
 import { Ride } from "@prisma/client";
 import { useRouter } from "next/router";
-import { FiChevronRight } from "react-icons/fi";
+import { FiArrowRight, FiChevronRight } from "react-icons/fi";
 import BasicButton from "./BasicButton";
 
 type SearchResultProps = {
@@ -9,17 +9,14 @@ type SearchResultProps = {
 };
 
 export default function SearchResult({
-  result,
+  result: { id, fromAddr, toAddr, datetime, numSeats, email, price, phone },
   className = "",
 }: SearchResultProps) {
   const { push } = useRouter();
 
-  const { id, fromAddr, toAddr, datetime, numSeats, email, price, phone } =
-    result;
-
   return (
     <BasicButton
-      className="border-gray-300 bg-white !p-0 text-black"
+      className="border-gray-300 bg-white p-0 text-black"
       onClick={() => {
         push({ pathname: "/ride/[id]", query: { id } });
       }}
@@ -29,8 +26,12 @@ export default function SearchResult({
       p-5 text-left ${className}`}
       >
         <div className="flex-1">
-          <h3 className="my-0 text-xl font-semibold">
-            {fromAddr} to {toAddr}
+          <h3 className="my-0 flex flex-wrap items-center text-xl font-semibold">
+            {fromAddr}
+            <span className="mx-2">
+              <FiArrowRight />
+            </span>
+            {toAddr}
           </h3>
           <div>{new Date(datetime).toLocaleString()}</div>
         </div>
