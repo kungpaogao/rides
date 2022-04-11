@@ -30,7 +30,21 @@ model Ride {
 model User {
   createdAt DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
   id        String    @id @unique @db.Uuid
+  email     String    @unique
+  messages  Message[] @relation("messagesTousers")
   rides     Ride[]
 
   @@map("users")
+}
+
+model Message {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  user      String   @db.Uuid
+  fromEmail String   @default("''''")
+  toEmail   String   @default("''''")
+  message   String?
+  users     User     @relation("messagesTousers", fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("messages")
 }

@@ -12,16 +12,35 @@ import BasicInput from "../../components/BasicInput";
 import BasicTextArea from "../../components/BasicTextArea";
 import { useFetchStatus } from "../../lib/useFetchStatus";
 import PageStatus from "../../types/PageStatus";
+import { Auth } from "@supabase/ui";
+import { useState } from "react";
+import { basicFetchPost } from "../../lib/basicFetch";
 
 export default function RideDetail() {
   const router = useRouter();
   const { id } = router.query;
+  const { user } = Auth.useUser();
+
+  const [emailMessage, setEmailMessage] = useState("");
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
 
   const {
     data: ride,
     error,
     status: pageStatus,
   } = useFetchStatus<Ride, Error>(router.isReady ? `/api/ride/${id}` : null);
+
+  async function send(to: string, message?: string, sender?: string) {
+    setIsSendingEmail(true);
+    try {
+      await basicFetchPost("/api/email", { to, message, sender });
+      setEmailMessage("");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsSendingEmail(false);
+    }
+  }
 
   if (pageStatus === PageStatus.Error) {
     return <div className="prose w-full max-w-full py-7">{error?.message}</div>;
@@ -51,14 +70,26 @@ export default function RideDetail() {
           {ride.numSeats} seats (availability may differ)
         </div>
 
-        <div className="mt-7 flex w-fit flex-col gap-3 rounded-lg border p-3 shadow-md">
-          <BasicInput label="Driver" disabled value={ride.email} />
+        <div className="mt-7 flex w-96 flex-col gap-3 rounded-lg border p-3 shadow-md">
+          <BasicInput label="Driver" disabled value={ride.email} expand />
 
           <BasicTextArea
+            textAreaClassName="h-48"
+            value={emailMessage}
+            onChange={(e) => setEmailMessage(e.target.value)}
+            disabled={isSendingEmail}
             label="Message (optional)"
             placeholder="Looking for a ride!"
+            expand
           />
-          <BasicButton>Request ride</BasicButton>
+
+          <BasicButton
+            disabled={isSendingEmail}
+            onClick={() => send(ride.email, emailMessage, user?.email)}
+            expand
+          >
+            Request ride
+          </BasicButton>
         </div>
       </div>
     );
