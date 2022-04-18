@@ -42,7 +42,7 @@ export default function CreateRide() {
     setIsSubmitError(false);
     setIsSubmitting(true);
     try {
-      await basicFetchPost("/api/rides", data);
+      await basicFetchPost("/api/ride/new", data);
       reset();
     } catch (err: any) {
       if (err.name === "401") {
