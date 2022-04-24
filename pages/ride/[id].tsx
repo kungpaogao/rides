@@ -15,6 +15,7 @@ import PageStatus from "../../types/PageStatus";
 import { Auth } from "@supabase/ui";
 import { useState } from "react";
 import { basicFetchPost } from "../../lib/basicFetch";
+import Loading from "../../components/Loading";
 
 export default function RideDetail() {
   const router = useRouter();
@@ -95,5 +96,5 @@ export default function RideDetail() {
     );
   }
 
-  return <>Loading...</>;
+  return <Loading />;
 }
