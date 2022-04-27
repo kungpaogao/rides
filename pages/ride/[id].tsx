@@ -61,7 +61,10 @@ export default function RideDetail() {
         </h2>
 
         <div className="flex items-center gap-3">
-          <FiCalendar /> {new Date(ride.datetime).toLocaleString()}
+          <FiCalendar />
+          <time dateTime={new Date(ride.datetime).toISOString()}>
+            {new Date(ride.datetime).toLocaleString()}
+          </time>
         </div>
         <div className="flex items-center gap-3">
           <FiDollarSign />${ride.price} per seat

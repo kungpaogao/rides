@@ -33,7 +33,9 @@ export default function SearchResult({
             </span>
             {toAddr}
           </h3>
-          <div>{new Date(datetime).toLocaleString()}</div>
+          <time dateTime={new Date(datetime).toISOString()}>
+            {new Date(datetime).toLocaleString()}
+          </time>
         </div>
         <div className="text-right">
           <div className="text-xl font-semibold">${price}</div>
