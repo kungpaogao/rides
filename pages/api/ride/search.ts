@@ -8,8 +8,6 @@ import { SearchRideQueryDbSchema } from "../../../types/SearchRide";
 import { checkAuth } from "../../../lib/checkAuth";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  await checkAuth(req);
-
   const {
     // frad and trad defaults are 100km
     query: { from, to, dt },
@@ -18,6 +16,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (method === "GET") {
     try {
+      await checkAuth(req);
+
       if (!from || !to) throw new Error("Bad request");
 
       const [{ lat: flat, lng: flng }, { lat: tlat, lng: tlng }] =
