@@ -1,10 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { FiSearch } from "react-icons/fi";
 import BasicButton from "../components/BasicButton";
 import BasicInput from "../components/BasicInput";
+import BasicToast from "../components/BasicToast";
 import PlaceSearchInput from "../components/PlaceSearchInput";
 import { SearchRideQuery, SearchRideQuerySchema } from "../types/SearchRide";
 
@@ -27,6 +28,9 @@ export default function Home() {
       setValue("to", e.target.value);
     },
   });
+
+  // TODO: remove
+  const [open, setOpen] = useState(true);
 
   const onSubmit: SubmitHandler<SearchRideQuery> = async ({
     from,
@@ -117,6 +121,13 @@ export default function Home() {
       >
         Post a ride
       </BasicButton>
+      <BasicToast
+        open={open}
+        setOpen={setOpen}
+        title="Notifications"
+        description="We added notifications!"
+        closeLabel="Cool!"
+      />
     </div>
   );
 }
