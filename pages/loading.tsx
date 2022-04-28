@@ -2,10 +2,10 @@ import { GetServerSideProps } from "next";
 import Loading from "../components/Loading";
 
 type LoadingPageProps = {
-  hehe: string,
-}
+  hehe: string;
+};
 
-export default function LoadingPage({hehe}: LoadingPageProps) {
+export default function LoadingPage({ hehe }: LoadingPageProps) {
   return (
     <div className="p-5">
       <p>{hehe}</p>
@@ -15,5 +15,5 @@ export default function LoadingPage({hehe}: LoadingPageProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  return { props: {hehe: "he".repeat(Math.random()*17 + 2)}}
-}
+  return { props: { hehe: "he".repeat(Math.random() * 17 + 2) } };
+};

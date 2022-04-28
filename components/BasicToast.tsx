@@ -24,12 +24,15 @@ export default function BasicToast({
   return (
     <Toast.Provider>
       <Toast.Root
-        className="radix-swipe-end:animate-toast-swipe-out 
-        translate-x-radix-toast-swipe-move-x radix-swipe-cancel:translate-x-0 
-        radix-swipe-cancel:duration-200 radix-swipe-cancel:ease-[ease] 
-        flex items-center rounded-lg border bg-white px-4 py-3 shadow-lg
+        className="flex 
+        items-center rounded-lg 
+        border bg-white 
+        px-4 py-3 shadow-lg translate-x-radix-toast-swipe-move-x 
         radix-state-open:animate-toast-slide-in-bottom 
-        radix-state-closed:animate-toast-hide 
+        radix-state-closed:animate-toast-hide radix-swipe-cancel:translate-x-0 
+        radix-swipe-cancel:duration-200
+        radix-swipe-cancel:ease-[ease] 
+        radix-swipe-end:animate-toast-swipe-out 
         md:radix-state-open:animate-toast-slide-in-right"
         open={open}
         onOpenChange={setOpen}
@@ -57,9 +60,7 @@ export default function BasicToast({
           </Toast.Close>
         </div>
       </Toast.Root>
-      <Toast.Viewport
-        className="fixed top-0 right-0 z-50 w-full p-3 md:w-auto md:p-6"
-      />
+      <Toast.Viewport className="fixed top-0 right-0 z-50 w-full p-3 md:w-auto md:p-6" />
     </Toast.Provider>
   );
 }
