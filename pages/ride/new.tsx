@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { basicFetchPost } from "../../lib/basicFetch";
+import { basicFetchPostWithAuth } from "../../lib/basicFetch";
 import BasicButton from "../../components/BasicButton";
 import BasicInput from "../../components/BasicInput";
 import { NewRide, NewRideSchema } from "../../types/NewRide";
@@ -42,7 +42,7 @@ export default function CreateRide() {
     setIsSubmitError(false);
     setIsSubmitting(true);
     try {
-      await basicFetchPost("/api/ride/new", data);
+      await basicFetchPostWithAuth("/api/ride/new", data);
       reset();
     } catch (err: any) {
       if (err.name === "401") {

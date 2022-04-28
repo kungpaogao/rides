@@ -14,7 +14,7 @@ import { useFetchStatus } from "../../lib/useFetchStatus";
 import PageStatus from "../../types/PageStatus";
 import { Auth } from "@supabase/ui";
 import { useState } from "react";
-import { basicFetchPost } from "../../lib/basicFetch";
+import { basicFetchPostWithAuth } from "../../lib/basicFetch";
 import Loading from "../../components/Loading";
 
 export default function RideDetail() {
@@ -34,7 +34,7 @@ export default function RideDetail() {
   async function send(to: string, message?: string, sender?: string) {
     setIsSendingEmail(true);
     try {
-      await basicFetchPost("/api/email", { to, message, sender });
+      await basicFetchPostWithAuth("/api/email", { to, message, sender });
       setEmailMessage("");
     } catch (err) {
       console.error(err);

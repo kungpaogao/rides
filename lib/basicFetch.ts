@@ -40,9 +40,22 @@ export async function basicFetchWithAuth(
 }
 
 /**
- * `basicFetchWithAuth` wrapper to cut out init
+ * `basicFetch` wrapper to make POST requests
  */
 export async function basicFetchPost(input: RequestInfo, data: any) {
+  return basicFetch(input, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+}
+
+/**
+ * `basicFetchWithAuth` wrapper to make POST requests
+ */
+export async function basicFetchPostWithAuth(input: RequestInfo, data: any) {
   return basicFetchWithAuth(input, {
     method: "POST",
     headers: {
