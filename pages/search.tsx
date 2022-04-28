@@ -40,7 +40,7 @@ export default function Search() {
           <div className="flex items-center justify-center">
             <p>
               Please{" "}
-              <Link href={`/login?redirect=${pathname}${urlSearchParams}`}>
+              <Link href={`/login?redirect=${pathname}?${urlSearchParams}`}>
                 log in
               </Link>
               .
