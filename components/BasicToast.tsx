@@ -58,8 +58,7 @@ export default function BasicToast({
         </div>
       </Toast.Root>
       <Toast.Viewport
-        className="fixed bottom-0 right-0 z-50 w-full p-3 md:w-auto
-      md:p-6"
+        className="fixed top-0 right-0 z-50 w-full p-3 md:w-auto md:p-6"
       />
     </Toast.Provider>
   );
