@@ -32,7 +32,7 @@ export default function Login({ user }: LoginProps) {
         if (session?.user?.email?.endsWith("@cornell.edu")) {
           // manually set session, might not be necessary
           supabase.auth.setSession(session?.access_token);
-          basicFetchPost("/api/auth", { event, session });
+          basicFetchPost("/api/login", { event, session });
         } else {
           // TODO: some dialog or toast message
           console.error("This app is for Cornell University members only.");

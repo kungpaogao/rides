@@ -1,5 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { supabase } from "../../lib/supabaseClient";
+import type { NextApiRequest } from "next";
+import { supabase } from "./supabaseClient";
 
 export async function checkAuth(req: NextApiRequest) {
   let authError;
@@ -28,7 +28,3 @@ export async function checkAuth(req: NextApiRequest) {
 
   return user;
 }
-
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-  supabase.auth.api.setAuthCookie(req, res);
-};

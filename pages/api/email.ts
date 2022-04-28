@@ -4,7 +4,7 @@ import sanitizeHtml from "sanitize-html";
 import { z } from "zod";
 import { prisma } from "../../lib/prismaClient";
 import { sendEmail } from "../../lib/sendInBlueClient";
-import { checkAuth } from "./auth";
+import { checkAuth } from "../../lib/checkAuth";
 
 const EMAIL_RATE_LIMIT = 5;
 

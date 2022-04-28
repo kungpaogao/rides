@@ -1,9 +1,8 @@
-import { User } from "@supabase/supabase-js";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { geocode } from "../../../lib/googleMaps";
 import { prisma } from "../../../lib/prismaClient";
 import { NewRide, NewRideSchema } from "../../../types/NewRide";
-import { checkAuth } from "../auth";
+import { checkAuth } from "../../../lib/checkAuth";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {

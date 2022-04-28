@@ -5,7 +5,7 @@ import { geocode } from "../../../lib/googleMaps";
 import { prisma } from "../../../lib/prismaClient";
 import { queryToString } from "../../../lib/queryToString";
 import { SearchRideQueryDbSchema } from "../../../types/SearchRide";
-import { checkAuth } from "../auth";
+import { checkAuth } from "../../../lib/checkAuth";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   await checkAuth(req);
