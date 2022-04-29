@@ -1,26 +1,20 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useFetchStatus } from "../lib/useFetchStatus";
 import Loading from "../components/Loading";
-import { queryToString } from "../lib/queryToString";
 import SearchResult from "../components/SearchResult";
 import SearchFilters, {
   FilterContextProvider,
 } from "../components/SearchFilters";
 import { SearchRideResult } from "../types/SearchRide";
 import PageStatus from "../types/PageStatus";
+import { useNavigation } from "../lib/hooks/useNavigation";
 
 export default function Search() {
-  const { pathname, query, isReady } = useRouter();
+  const { isReady } = useRouter();
 
-  const urlSearchParams = useMemo(() => {
-    let params: any = {};
-    Object.keys(query).forEach((k) => {
-      params[k] = queryToString(query[k]);
-    });
-    return new URLSearchParams(params);
-  }, [query]);
+  const { urlSearchParams, redirect } = useNavigation();
 
   const {
     data: results,
@@ -39,11 +33,7 @@ export default function Search() {
         {error?.name === "401" ? (
           <div className="flex items-center justify-center">
             <p>
-              Please{" "}
-              <Link href={`/login?redirect=${pathname}?${urlSearchParams}`}>
-                log in
-              </Link>
-              .
+              Please <Link href={`/login?redirect=${redirect}`}>log in</Link>.
             </p>
           </div>
         ) : (

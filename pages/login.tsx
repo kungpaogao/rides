@@ -13,15 +13,19 @@ type LoginProps = {
 
 export default function Login({ user }: LoginProps) {
   const { query, push } = useRouter();
-  const redirect = queryToString(query.redirect);
+  const redirectQuery = queryToString(query.redirect);
+
+  function redirect() {
+    if (query?.redirect?.length) {
+      push(redirectQuery);
+    } else {
+      push("/");
+    }
+  }
 
   useEffect(() => {
     if (user) {
-      if (query?.redirect?.length) {
-        push(redirect);
-      } else {
-        push("/");
-      }
+      redirect();
     }
   }, []);
 
@@ -32,7 +36,10 @@ export default function Login({ user }: LoginProps) {
         if (session?.user?.email?.endsWith("@cornell.edu")) {
           // manually set session, might not be necessary
           supabase.auth.setSession(session?.access_token);
+          // set ssr auth
           basicFetchPost("/api/login", { event, session });
+          // redirect
+          redirect();
         } else {
           // TODO: some dialog or toast message
           console.error("This app is for Cornell University members only.");
@@ -50,7 +57,11 @@ export default function Login({ user }: LoginProps) {
       {
         provider: "google",
       },
-      { redirectTo: `${location.origin}/login` }
+      {
+        redirectTo: `${location.origin}/login?redirect=${encodeURIComponent(
+          redirectQuery
+        )}`,
+      }
     );
   }
 
