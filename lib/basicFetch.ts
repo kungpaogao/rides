@@ -3,7 +3,7 @@ import { supabase } from "./supabaseClient";
 /**
  * Fetch wrapper that throws errors on non-200 responses
  */
-export async function basicFetch(input: RequestInfo, init?: RequestInit) {
+export async function basicFetchRes(input: RequestInfo, init?: RequestInit) {
   const res = await fetch(input, init);
 
   if (!res.ok) {
@@ -11,6 +11,16 @@ export async function basicFetch(input: RequestInfo, init?: RequestInit) {
     error.name = res.status.toString();
     throw error;
   }
+
+  return res;
+}
+
+/**
+ * Fetch wrapper that throws errors on non-200 responses and returns json
+ * response
+ */
+export async function basicFetch(input: RequestInfo, init?: RequestInit) {
+  const res = await basicFetchRes(input, init);
 
   return res.json();
 }
@@ -37,6 +47,19 @@ export async function basicFetchWithAuth(
   };
 
   return basicFetch(input, initWithAuth);
+}
+
+/**
+ * `basicFetchRes` wrapper to make POST requests
+ */
+export async function basicFetchPostRes(input: RequestInfo, data: any) {
+  return basicFetchRes(input, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
 }
 
 /**
