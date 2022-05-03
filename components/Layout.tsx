@@ -9,7 +9,7 @@ type LayoutProps = {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center">
+    <div className="flex h-full min-h-screen flex-col">
       <Head>
         <title>Cornell Rides</title>
         <link rel="icon" href="/favicon.ico" />
@@ -19,11 +19,9 @@ export default function Layout({ children }: LayoutProps) {
         <Navigation className="px-5 lg:px-28" />
       </nav>
 
-      <main className="w-full flex-1 px-5 lg:px-28">{children}</main>
+      <main className="mb-12 w-full flex-1 px-5 lg:px-28">{children}</main>
 
-      <footer className="w-full">
-        <Footer />
-      </footer>
+      <Footer />
     </div>
   );
 }

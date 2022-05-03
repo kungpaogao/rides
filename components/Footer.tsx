@@ -2,7 +2,7 @@ import { FiGithub } from "react-icons/fi";
 
 export default function Footer() {
   return (
-    <div className="mt-12 flex h-24 w-full items-center justify-center gap-2 bg-gray-50">
+    <footer className="min-h-24 flex w-full items-center justify-center gap-2 bg-gray-50 p-10">
       <FiGithub size={18} />
       <a
         className="underline"
@@ -10,6 +10,6 @@ export default function Footer() {
       >
         Contribute or report an issue
       </a>
-    </div>
+    </footer>
   );
 }

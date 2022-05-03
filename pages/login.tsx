@@ -2,6 +2,7 @@ import { User } from "@supabase/supabase-js";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { FcGoogle } from "react-icons/fc";
 import BasicButton from "../components/BasicButton";
 import { basicFetchPost } from "../lib/basicFetch";
 import { queryToString } from "../lib/queryToString";
@@ -10,6 +11,13 @@ import { supabase } from "../lib/supabaseClient";
 type LoginProps = {
   user: User | null;
 };
+
+const features = [
+  { id: "post-rides", desc: "Post rides", icon: "📝" },
+  { id: "search-rides", desc: "Search rides", icon: "🔍" },
+  { id: "send-emails", desc: "Send emails", icon: "📧" },
+  { id: "places-autocomplete", desc: "Places autocomplete", icon: "📍" },
+];
 
 export default function Login({ user }: LoginProps) {
   const { query, push } = useRouter();
@@ -66,8 +74,25 @@ export default function Login({ user }: LoginProps) {
   }
 
   return (
-    <div>
-      <BasicButton onClick={signInWithGoogle}>Sign in with Google</BasicButton>
+    <div className="flex h-full items-center justify-center">
+      <div className="prose flex w-full max-w-sm flex-col rounded-lg border p-7 shadow-md sm:w-1/2">
+        <h2 className="text-lg font-semibold">Sign in or signup</h2>
+        <ul className="text-base">
+          {features.map((feature) => (
+            <li key={feature.id}>
+              <span className="mr-2">{feature.icon}</span>
+              {feature.desc}
+            </li>
+          ))}
+        </ul>
+        <BasicButton
+          onClick={signInWithGoogle}
+          className="mt-5 flex items-center justify-center gap-2"
+        >
+          <FcGoogle />
+          Sign in with Google
+        </BasicButton>
+      </div>
     </div>
   );
 }
