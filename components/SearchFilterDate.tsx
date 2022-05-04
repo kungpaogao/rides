@@ -1,12 +1,8 @@
 import { RangeCalendar } from "@mantine/dates";
-import { useContext } from "react";
-import { FilterContext } from "./SearchFilters";
 
-export default function SearchFilterDate() {
-  const {
-    date: [dateRange, setDateRange],
-  } = useContext(FilterContext);
-
+export default function SearchFilterDate({
+  date: [dateRange, setDateRange],
+}: any) {
   return (
     <>
       <RangeCalendar

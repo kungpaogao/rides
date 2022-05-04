@@ -1,12 +1,4 @@
-import {
-  createContext,
-  Dispatch,
-  PropsWithChildren,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import BasicButton from "./BasicButton";
 import { FiX } from "react-icons/fi";
@@ -24,11 +16,6 @@ type SearchFiltersProps = {
   onApplyFilters?: Dispatch<SetStateAction<SearchRideResult[] | undefined>>;
 };
 
-export type SearchFilterProps = {
-  value: any;
-  setValue: Dispatch<SetStateAction<any>>;
-};
-
 type Filter = {
   id: string;
   title: string;
@@ -40,27 +27,6 @@ type Filter = {
   activeValue?: any;
 };
 
-export const FilterContext = createContext<any>(null);
-
-export function FilterContextProvider({ children }: PropsWithChildren<any>) {
-  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
-    null,
-    null,
-  ]);
-  const [maxPrice, setMaxPrice] = useState<number>(100);
-  const [maxDistance, setMaxDistance] = useState<number>(100);
-
-  const value = {
-    date: [dateRange, setDateRange],
-    price: [maxPrice, setMaxPrice],
-    distance: [maxDistance, setMaxDistance],
-  };
-
-  return (
-    <FilterContext.Provider value={value}>{children}</FilterContext.Provider>
-  );
-}
-
 export default function SearchFilters({
   data,
   className,
@@ -71,13 +37,21 @@ export default function SearchFilters({
   const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
 
   /** controlled input states */
-  const filterState = useContext(FilterContext);
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
+  const [maxPrice, setMaxPrice] = useState<number>(100);
+  const [maxDistance, setMaxDistance] = useState<number>(100);
 
-  const {
-    date: [, setDateRange],
-    price: [, setMaxPrice],
-    distance: [, setMaxDistance],
-  } = filterState;
+  const filterState: { [key: string]: any } = useMemo(
+    () => ({
+      date: [dateRange, setDateRange],
+      price: [maxPrice, setMaxPrice],
+      distance: [maxDistance, setMaxDistance],
+    }),
+    [dateRange, maxPrice, maxDistance]
+  );
 
   const [activeFilters, setActiveFilters] = useState<{ [key: string]: Filter }>(
     {}
@@ -140,15 +114,14 @@ export default function SearchFilters({
 
       setActiveFilters(newFilters);
     }
-
-    closeDialog();
   }
 
   /**
-   * Apply filters when active filters change
+   * Apply filters when active filters change and close dialog
    */
   useEffect(() => {
     onApplyFilters?.(getFilteredData());
+    closeDialog();
   }, [activeFilters]);
 
   /**
@@ -212,7 +185,7 @@ export default function SearchFilters({
                 </Dialog.Close>
               </div>
               <div className="p-3">
-                {dialogFilter && dialogFilter.content()}
+                {dialogFilter && <dialogFilter.content {...filterState} />}
               </div>
               <div className="border-t p-3">
                 <BasicButton

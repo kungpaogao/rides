@@ -1,13 +1,9 @@
 import { Slider } from "@mantine/core";
-import { useContext } from "react";
 import BasicInput from "./BasicInput";
-import { FilterContext } from "./SearchFilters";
 
-export default function SearchFilterDistance() {
-  const {
-    distance: [maxDistance, setMaxDistance],
-  } = useContext(FilterContext);
-
+export default function SearchFilterDistance({
+  distance: [maxDistance, setMaxDistance],
+}: any) {
   return (
     <>
       <Slider

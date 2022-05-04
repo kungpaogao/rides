@@ -4,9 +4,7 @@ import { useRouter } from "next/router";
 import { useFetchStatus } from "../lib/useFetchStatus";
 import Loading from "../components/Loading";
 import SearchResult from "../components/SearchResult";
-import SearchFilters, {
-  FilterContextProvider,
-} from "../components/SearchFilters";
+import SearchFilters from "../components/SearchFilters";
 import { SearchRideResult } from "../types/SearchRide";
 import PageStatus from "../types/PageStatus";
 import { useNavigation } from "../lib/hooks/useNavigation";
@@ -51,9 +49,7 @@ export default function Search() {
         <h2>Results</h2>
 
         <div>
-          <FilterContextProvider>
-            <SearchFilters data={results} onApplyFilters={setFilteredResults} />
-          </FilterContextProvider>
+          <SearchFilters data={results} onApplyFilters={setFilteredResults} />
         </div>
 
         <div className="mt-5 flex w-full flex-col gap-3">
