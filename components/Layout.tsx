@@ -1,13 +1,14 @@
 import Head from "next/head";
 import { ReactNode } from "react";
 import Footer from "./Footer";
-import Navigation from "./Navigation";
+import Navigation, { NavigationProps } from "./Navigation";
 
 type LayoutProps = {
   children: ReactNode;
+  navigationProps?: NavigationProps;
 };
 
-export default function Layout({ children }: LayoutProps) {
+export default function Layout({ children, navigationProps }: LayoutProps) {
   return (
     <div className="flex h-full min-h-screen flex-col">
       <Head>
@@ -16,7 +17,7 @@ export default function Layout({ children }: LayoutProps) {
       </Head>
 
       <nav className="w-full">
-        <Navigation className="px-5 lg:px-28" />
+        <Navigation {...navigationProps} />
       </nav>
 
       <main className="mb-12 w-full flex-1 px-5 lg:px-28">{children}</main>
