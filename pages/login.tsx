@@ -75,7 +75,7 @@ export default function Login({ user }: LoginProps) {
 
   return (
     <div className="flex h-full items-center justify-center">
-      <div className="prose flex w-full max-w-sm flex-col rounded-lg border p-7 shadow-md sm:w-1/2">
+      <div className="prose mt-12 flex w-full max-w-sm flex-col rounded-lg border p-7 shadow-md sm:w-1/2">
         <h2 className="text-lg font-semibold">Sign in or signup</h2>
         <ul className="text-base">
           {features.map((feature) => (

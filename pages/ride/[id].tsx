@@ -57,7 +57,8 @@ export default function RideDetail() {
         </BasicButton>
 
         <h2 className="flex flex-wrap items-center">
-          {ride.fromAddr} <FiArrowRight className="mx-2" /> {ride.toAddr}
+          {ride.fromAddr} <FiArrowRight className="mx-2" title="to" />{" "}
+          {ride.toAddr}
         </h2>
 
         <div className="flex items-center gap-3">

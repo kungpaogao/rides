@@ -16,7 +16,7 @@ export default function SearchResult({
 
   return (
     <BasicButton
-      className="border-gray-300 bg-white p-0 text-black"
+      className="rounded-md border-gray-300 bg-white p-0 text-black"
       onClick={() => {
         push({ pathname: "/ride/[id]", query: { id } });
       }}
@@ -29,7 +29,7 @@ export default function SearchResult({
           <h3 className="my-0 flex flex-wrap items-center text-xl font-semibold">
             {fromAddr}
             <span className="mx-2">
-              <FiArrowRight />
+              <FiArrowRight title="to" />
             </span>
             {toAddr}
           </h3>
