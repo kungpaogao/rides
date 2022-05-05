@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ReactElement, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useFetchStatus } from "../lib/useFetchStatus";
@@ -8,6 +8,7 @@ import SearchFilters from "../components/SearchFilters";
 import { SearchRideResult } from "../types/SearchRide";
 import PageStatus from "../types/PageStatus";
 import { useNavigation } from "../lib/hooks/useNavigation";
+import Layout from "../components/Layout";
 
 export default function Search() {
   const { isReady } = useRouter();
@@ -45,10 +46,8 @@ export default function Search() {
 
   if (pageStatus === PageStatus.Success && results) {
     return (
-      <div className="prose w-full max-w-full py-7 prose-h3:mt-0">
-        <h2>Results</h2>
-
-        <div>
+      <div className="prose w-full max-w-full pb-7 prose-h3:mt-0">
+        <div className="mt-7">
           <SearchFilters data={results} onApplyFilters={setFilteredResults} />
         </div>
 
@@ -70,3 +69,7 @@ export default function Search() {
     </div>
   );
 }
+
+Search.getLayout = function getLayout(page: ReactElement) {
+  return <Layout navigationProps={{ isSearchVisible: true }}>{page}</Layout>;
+};
