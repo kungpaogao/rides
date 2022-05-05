@@ -4,7 +4,6 @@ import BasicButton from "./BasicButton";
 import { FiX } from "react-icons/fi";
 import { SearchRideResult } from "../types/SearchRide";
 import dayjs from "dayjs";
-import isBetween from "dayjs/plugin/isBetween";
 import SearchFilterPrice from "./SearchFilterPrice";
 import SearchFilterDistance from "./SearchFilterDistance";
 import SearchFilterDate from "./SearchFilterDate";
@@ -23,6 +22,8 @@ type Filter = {
   reset: () => void;
   setValue: any;
   content: any;
+  defaultValue?: any;
+  filterLabel?: any;
   activeFilter?: (ride: SearchRideResult) => boolean;
   activeValue?: any;
 };
@@ -63,6 +64,7 @@ export default function SearchFilters({
       title: "Price",
       filter: (comp: number) => (ride: SearchRideResult) => ride.price <= comp,
       reset: () => setMaxPrice(100),
+      defaultValue: 100,
       setValue: setMaxPrice,
       content: SearchFilterPrice,
     },
@@ -72,6 +74,7 @@ export default function SearchFilters({
       filter: (comp: number) => (ride: SearchRideResult) =>
         ride.fromDistance <= comp && ride.toDistance <= comp,
       reset: () => setMaxDistance(100),
+      defaultValue: 100,
       setValue: setMaxDistance,
       content: SearchFilterDistance,
     },
@@ -81,6 +84,7 @@ export default function SearchFilters({
       filter: (comp: [Date, Date]) => (ride: SearchRideResult) =>
         dayjs(ride.datetime).isBetween(comp[0], comp[1], "day", "[]"),
       reset: () => setDateRange([null, null]),
+      defaultValue: [null, null],
       setValue: setDateRange,
       content: SearchFilterDate,
     },
@@ -103,16 +107,22 @@ export default function SearchFilters({
     if (dialogFilter) {
       const value = filterState[dialogFilter.id][0];
 
-      const newFilters = {
-        ...activeFilters,
-        [dialogFilter.id]: {
-          ...dialogFilter,
-          activeValue: value,
-          activeFilter: dialogFilter.filter(value),
-        },
-      };
+      if (value === dialogFilter.defaultValue) {
+        const newFilters = { ...activeFilters };
+        delete newFilters[dialogFilter.id];
+        setActiveFilters(newFilters);
+      } else {
+        const newFilters = {
+          ...activeFilters,
+          [dialogFilter.id]: {
+            ...dialogFilter,
+            activeValue: value,
+            activeFilter: dialogFilter.filter(value),
+          },
+        };
 
-      setActiveFilters(newFilters);
+        setActiveFilters(newFilters);
+      }
     }
   }
 
@@ -125,6 +135,13 @@ export default function SearchFilters({
   }, [activeFilters]);
 
   /**
+   * Re-filter data when data changes
+   */
+  useEffect(() => {
+    onApplyFilters?.(getFilteredData());
+  }, [data]);
+
+  /**
    * Reset filter to default value
    */
   function clearFilter() {
@@ -135,7 +152,6 @@ export default function SearchFilters({
    * Returns filtered data
    */
   function getFilteredData() {
-    dayjs.extend(isBetween);
     let filteredData = data;
 
     Object.keys(activeFilters).forEach((filterKey) => {
@@ -208,7 +224,13 @@ export default function SearchFilters({
         <BasicButton
           key={filter.id}
           onClick={showFilter(filter)}
-          className="rounded-full bg-white px-3 text-black"
+          className={`rounded-full px-3 hover:border-black d:border-gray-300
+          ${
+            filter.id in activeFilters
+              ? "border-2 border-black bg-gray-200"
+              : ""
+          }`}
+          flat
         >
           {filter.title}
         </BasicButton>
